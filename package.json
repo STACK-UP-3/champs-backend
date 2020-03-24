@@ -1,0 +1,24 @@
+{
+  "name": "barefoot-nomad",
+  "version": "1.0.0",
+  "description": "app to allow booking and reservation of trips",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STACK-UP-3/champs-backend.git"
+  },
+  "author": "champs-dev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/STACK-UP-3/champs-backend/issues"
+  },
+  "homepage": "https://github.com/STACK-UP-3/champs-backend#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-import": "^2.20.1"
+  }
+}
