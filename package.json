@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "connectdb": "nodemon --exec babel-node ./server/config/dbconnect.js "
   },
   "repository": {
@@ -23,13 +24,15 @@
     "eslint-plugin-import": "^2.20.1"
   },
   "dependencies": {
-    "dotenv": "^8.2.0",
-    "nodemon": "^2.0.2",
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
     "@babel/register": "^7.9.0",
+    "coveralls": "^3.0.11",
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.2",
+    "nyc": "^15.0.0",
     "pg": "^7.18.2"
   }
 }
