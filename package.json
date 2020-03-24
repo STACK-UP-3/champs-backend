@@ -4,7 +4,8 @@
   "description": "app to allow booking and reservation of trips",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "connectdb": "nodemon --exec babel-node ./server/config/dbconnect.js "
   },
   "repository": {
     "type": "git",
@@ -18,10 +19,17 @@
   "homepage": "https://github.com/STACK-UP-3/champs-backend#readme",
   "devDependencies": {
     "eslint": "^6.8.0",
-    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.1"
   },
   "dependencies": {
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.2",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/register": "^7.9.0",
+    "pg": "^7.18.2"
   }
 }
