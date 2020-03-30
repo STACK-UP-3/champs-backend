@@ -8,12 +8,20 @@ module.exports = {
     },
     lastname: {
       type: Sequelize.STRING,
+      allowNull: false
     },
     firstname: {
       type: Sequelize.STRING,
+      allowNull: false
     },
     email: {
       type: Sequelize.STRING,
+      allowNull: false,
+      isunique: true
+    },
+    password: {
+      type: Sequelize.STRING(1000),
+      allowNull: false
     },
     createdAt: {
       allowNull: false,
@@ -23,6 +31,10 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE,
     },
+    isVerified: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+    }
   }),
   down: (queryInterface) => queryInterface.dropTable('Users'),
 };

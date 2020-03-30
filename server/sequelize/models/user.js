@@ -5,6 +5,8 @@ export default (sequelize, DataTypes) => {
       lastname: DataTypes.STRING,
       firstname: DataTypes.STRING,
       email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      isVerified: DataTypes.BOOLEAN,
     },
     {},
   );
