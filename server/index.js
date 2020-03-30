@@ -2,6 +2,8 @@ import express from 'express';
 import db from './sequelize/models';
 import bnLog from './helpers/log.util';
 import logger from './config/winston';
+import swaggerUI from 'swagger-ui-express';
+import swaggerDoc from '../swagger.json';
 
 const { sequelize } = db;
 
@@ -20,6 +22,7 @@ sequelize.sync().then(() => {
 app.get('/success', bnLog((req, res) => { res.send('Yay!'); }));
 app.get('/error', bnLog(() => { throw new Error('Doh!'); }));
 app.get('/test', bnLog(dumFunction));
+app.use('/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
 app.get('**', (req, res) => {
   res.status(200).send({
