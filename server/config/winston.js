@@ -24,7 +24,7 @@ Object.keys(ifaces).forEach((ifname) => {
       ipname = iface.address;
       macname = iface.mac;
     }
-    ++alias;
+    alias += 1;
   });
 });
 
@@ -75,7 +75,7 @@ const options = {
 const logger = winston.createLogger({
   colorize: false,
   handleExceptions: true,
-  maxsize: 5242880, // 5MB,
+  maxsize: 5242880,
   format: combine(
     timestamp(),
     prettyPrint()

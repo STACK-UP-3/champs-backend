@@ -6,7 +6,8 @@
       "description": "Barefoot Normads done by Champs in Stackup 3.",
       "contact": {}
     },
-    "host": "localhost",
+    "host": "localhost:3000",
+    
     "securityDefinitions": {},
     "schemes": [
       "http",
@@ -57,7 +58,7 @@
               "description": "User signed in successfully"
             },
             "400": {
-              "description": "Incorrect password"
+              "description": "Incorrect email or password"
             },
             "404": {
               "description": "User does not exist!"

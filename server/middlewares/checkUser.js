@@ -1,4 +1,4 @@
-import authHelper from '../helpers/authHelpers';
+import AuthHelper from '../helpers/authHelpers';
 
 /**
  * This class contains methods
@@ -15,7 +15,7 @@ class checkUser {
    */
   static async isUser(req, res, next) {
     const { email } = req.body;
-    const user = await authHelper.findUser(email);
+    const user = await AuthHelper.findUser(email);
     if (user === null) {
       next();
     } else {
