@@ -10,7 +10,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
  * required to handle
  * authentication data to the database.
  */
-class authHelper {
+class AuthHelper {
 /**
    * This method creates the user in the database.
    * @param {object} data The data to create a user.
@@ -71,7 +71,7 @@ class authHelper {
   static async createToken(data) {
     try {
       const token = jwt.sign(
-        data, process.env.JWT_KEY,
+        data, process.env.SECRET_KEY,
         { expiresIn: '2h' }
       );
       return token;
@@ -87,7 +87,7 @@ class authHelper {
    */
   static verifyToken(token) {
     try {
-      const data = jwt.verify(token, process.env.JWT_KEY);
+      const data = jwt.verify(token, process.env.SECRET_KEY);
       return data;
     } catch (err) {
       return err;
@@ -118,4 +118,5 @@ class authHelper {
     }
   }
 }
-export default authHelper;
+
+export default AuthHelper;
