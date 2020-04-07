@@ -9,25 +9,24 @@ const {
 const ifaces = os.networkInterfaces();
 let ipname, macname;
 
-Object.keys(ifaces).forEach(function (ifname) {
+Object.keys(ifaces).forEach((ifname) => {
   let alias = 0;
 
-ifaces[ifname].forEach((iface) => {
-  if ('IPv4' !== iface.family || iface.internal !== false) {
-    return;
-  }
+  ifaces[ifname].forEach((iface) => {
+    if (iface.family !== 'IPv4' || iface.internal !== false) {
+      return;
+    }
 
-  if (alias >= 1) {
-    ipname = iface.address
-    macname = iface.mac
-  } else {
-    ipname = iface.address
-    macname = iface.mac
-  }
-  ++alias;
+    if (alias >= 1) {
+      ipname = iface.address;
+      macname = iface.mac;
+    } else {
+      ipname = iface.address;
+      macname = iface.mac;
+    }
+    ++alias;
+  });
 });
-});
-
 
 
 const options = {

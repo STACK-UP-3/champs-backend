@@ -1,9 +1,10 @@
 import express from 'express';
+import swaggerUI from 'swagger-ui-express';
 import db from './sequelize/models';
 import bnLog from './helpers/log.util';
 import logger from './config/winston';
-import swaggerUI from 'swagger-ui-express';
 import swaggerDoc from '../swagger.json';
+import route from './routes/index';
 
 const { sequelize } = db;
 
@@ -12,13 +13,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const port = process.env.PORT || 3000;
-
+const dumFunction = (req, res) => { res.send('Working well!'); };
 sequelize.sync().then(() => {
   app.listen(port, () => {
     logger.info(`Database succesfully connected and server listening on ${port}`);
   });
 });
-
+app.use('/api/v1', route);// base path
 app.get('/success', bnLog((req, res) => { res.send('Yay!'); }));
 app.get('/error', bnLog(() => { throw new Error('Doh!'); }));
 app.get('/test', bnLog(dumFunction));
@@ -30,8 +31,5 @@ app.get('**', (req, res) => {
     message: 'Hey !! You are Welcome to BareFoot Nomad',
   });
 });
-const dumFunction = (req, res) => { res.send('Working well!'); };
-
-
 
 export default app;
