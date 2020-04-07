@@ -8,7 +8,6 @@ export default (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       isVerified: DataTypes.BOOLEAN,
     },
-    {},
   );
   return User;
 };

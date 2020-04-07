@@ -11,12 +11,10 @@ let ipname, macname;
 
 Object.keys(ifaces).forEach((ifname) => {
   let alias = 0;
-
   ifaces[ifname].forEach((iface) => {
     if (iface.family !== 'IPv4' || iface.internal !== false) {
       return;
     }
-
     if (alias >= 1) {
       ipname = iface.address;
       macname = iface.mac;
@@ -27,8 +25,6 @@ Object.keys(ifaces).forEach((ifname) => {
     alias += 1;
   });
 });
-
-
 const options = {
   fileHttp: {
     level: 'http',
@@ -88,10 +84,8 @@ const logger = winston.createLogger({
   ],
   exitOnError: false
 });
-
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console(options.console));
 }
-
 
 export default logger;

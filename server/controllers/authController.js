@@ -39,12 +39,6 @@ class AuthController {
           status: 201,
           message: 'Account succesfully created, check your email to confirm'
         });
-      } else {
-        res.status(500).send({
-          status: 500,
-          message: 'the email was\'t sent check if your email address is corect',
-          mail
-        });
       }
     } else {
       res.status(500).send({
