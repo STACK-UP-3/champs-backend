@@ -1,4 +1,4 @@
-import { signupSchema } from '../schemas/authSchema';
+import { signupSchema, signinSchema } from '../schemas/authSchema';
 /**
  * This class contains all methods
  * required to validate
@@ -14,6 +14,28 @@ class validateAuth {
    */
   static validateSignup(req, res, next) {
     const { error } = signupSchema.validate(req.body);
+    const valid = error == null;
+    if (valid) {
+      next();
+    } else {
+      const { details } = error;
+      const message = details.map(i => i.message).join(',');
+      res.status(422).json({
+        status: 422,
+        message
+      });
+    }
+  }
+
+  /**
+   * This method handle the signin request.
+   * @param {object} req The user's request.
+   * @param {object} res The response.
+   * @param {object} next pass to next method.
+   * @returns {object} The error and some error messages .
+   */
+  static validateSignIn(req, res, next) {
+    const { error } = signinSchema.validate(req.body);
     const valid = error == null;
     if (valid) {
       next();

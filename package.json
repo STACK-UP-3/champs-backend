@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "app to allow booking and reservation of trips",
   "main": "index.js",
+  "nyc": {
+    "exclude": [
+      "server/helpers/log.util.js",
+      "server/config/*",
+      "server/sequelize/models/*.js"
+    ]
+  },
   "scripts": {
     "test": "npm run droptables:test && npm run migrate:test && env NODE_ENV=test nyc mocha --require @babel/polyfill --require @babel/register server/tests/**/*.js* --recursive --timeout 10000 --exit",
     "local:coveralls": "nyc npm run test && nyc report --reporter=text-lcov | coveralls",
@@ -30,6 +37,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "coveralls": "^3.0.11",
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.10.1",
@@ -58,6 +66,9 @@
     "logdna-winston": "^2.3.1",
     "pg": "^7.18.2",
     "pg-hstore": "^2.3.3",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "sendgrid": "^5.2.3",
     "sequelize": "^5.21.5",
     "swagger-ui-express": "^4.1.3",

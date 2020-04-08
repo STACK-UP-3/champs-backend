@@ -13,7 +13,7 @@
         "consistent-return": 0,
         "no-param-reassign": 0,
         "comma-dangle": 0,
-        "arrow-parens":0,
+        "arrow-parens":"off",
         "curly": ["error", "multi-line"],
         "prefer-destructuring": ["error", {
             "array": true,
@@ -24,7 +24,7 @@
         "import/no-unresolved": [2, {
             "commonjs": true
         }],
-        "no-plusplus" : "off",
+        "no-plusplus" : "error",
         "no-shadow": ["error", {
             "allow": ["req", "res", "err"]
         }],
