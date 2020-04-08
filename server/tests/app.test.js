@@ -4,6 +4,7 @@ import app from '../index';
 
 chai.use(chaiHttp);
 const router = () => chai.request(app);
+
 describe('app test suite', () => {
   it('users should be redirected to api root when he/she used wrong link', (done) => {
     router()

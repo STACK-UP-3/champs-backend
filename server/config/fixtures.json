@@ -1,0 +1,28 @@
+{
+    "users": [
+        {
+            "email": "champs@gmail.com",
+            "password": "nevasd"
+        },
+        {
+            "email": "devdev@gmail.com",
+            "password": "n"
+        },
+        {
+            "email": "devduev@gmail.com",
+            "password": "nevamind1"
+        },
+        {
+            "email": "",
+            "password": "nevamindu"
+        },
+        {
+            "email": "devdlkev@gmail.com",
+            "password": ""
+        },
+        {
+            "email": "devdlk@gmail.com",
+            "password": "devdlk"
+        }
+    ]
+}

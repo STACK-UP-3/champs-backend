@@ -10,7 +10,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
  * required to handle
  * authentication data to the database.
  */
-class authHelper {
+class AuthHelper {
 /**
    * This method creates the user in the database.
    * @param {object} data The data to create a user.
@@ -118,4 +118,5 @@ class authHelper {
     }
   }
 }
-export default authHelper;
+
+export default AuthHelper;
