@@ -1,7 +1,9 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
+import { config } from 'dotenv';
 import app from '../index';
 
+config();
 chai.use(chaiHttp);
 const router = () => chai.request(app);
 describe('POST data to SIGNUP', () => {

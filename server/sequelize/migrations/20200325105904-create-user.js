@@ -21,8 +21,21 @@ module.exports = {
     },
     password: {
       type: Sequelize.STRING(1000),
-      allowNull: false
+      allowNull: false,
+      select: false
     },
+    isVerified: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+    },
+    gender: { type: Sequelize.STRING },
+    birthdate: { type: Sequelize.DATEONLY },
+    preferredlanguage: { type: Sequelize.STRING },
+    preferredcurrency: { type: Sequelize.STRING },
+    location: { type: Sequelize.STRING },
+    Department: { type: Sequelize.STRING },
+    emailNotifications: { type: Sequelize.BOOLEAN },
+    inAppNotifications: { type: Sequelize.BOOLEAN },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
@@ -31,10 +44,6 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE,
     },
-    isVerified: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-    }
   }),
   down: (queryInterface) => queryInterface.dropTable('Users'),
 };
