@@ -19,7 +19,7 @@
     "drop": "sequelize db:migrate:undo:all",
     "droptables:test": "env NODE_ENV=test sequelize db:migrate:undo:all",
     "serve": "nodemon --exec babel-node server/index.js",
-    "start": "babel-node -- server/index.js",
+    "start": "env NODE_ENV=production npm run migrate && env NODE_ENV=production babel-node ./server/index.js",
     "droptables": "sequelize db:migrate:undo:all",
     "lint": "eslint --fix ./server"
   },

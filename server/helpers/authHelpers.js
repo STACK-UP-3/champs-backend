@@ -98,7 +98,7 @@ class authHelper {
   static async createUser(data) {
     const result = await User.create(data, {
       fields: [
-        'lastname', 'firstname', 'email', 'password', 'role', 'isVerified'
+        'lastname', 'firstname', 'email', 'username', 'password', 'role', 'isVerified'
       ]
     });
     return result;
@@ -112,7 +112,7 @@ class authHelper {
    */
   static async createToken(data) {
     try {
-      const token = jwt.sign(
+      const token = await jwt.sign(
         data, process.env.SECRET_KEY,
         { expiresIn: '2h' }
       );
@@ -148,12 +148,12 @@ class authHelper {
 
   /**
    * This method searches a user with specific email in the Database.
-   * @param {String} email the email of the user to be verified.
+   * @param {String} data the data of the user to be verified.
    * @returns {Boolean}  if the user exists or not.
    */
-  static async findUser(email) {
+  static async findUser(data) {
     try {
-      const user = await User.findOne({ where: { email } });
+      const user = await User.findOne({ where: data });
       return user;
     } catch (error) {
       return error;

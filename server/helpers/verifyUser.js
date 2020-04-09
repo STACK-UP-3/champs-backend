@@ -14,8 +14,8 @@ class VerifyUser {
      * @returns {boolean} message or User details after passing all checks.
      */
   static async inSignIn(email, password, done) {
-    const user = await AuthHelpers.findUser(email);
-
+    const data = { email };
+    const user = await AuthHelpers.findUser(data);
     if (user) {
       if (user.isVerified === false) return done('Please confirm your email before logging in!');
 
