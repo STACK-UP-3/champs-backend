@@ -17,4 +17,15 @@ describe('app test suite', () => {
         done(error);
       });
   });
+  it('users should be go first route', (done) => {
+    router()
+      .get('/')
+      .end((error, response) => {
+        expect(response.body).to.be.a('object');
+        expect(response.body).to.have.property('status');
+        expect(response.body.status).to.be.equal(200);
+        expect(response.body).to.have.property('message');
+        done(error);
+      });
+  });
 });

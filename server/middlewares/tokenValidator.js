@@ -1,24 +1,28 @@
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 import models from '../sequelize/models';
-import TokenHelper from '../helpers/tokenHelper';
 
 const { User } = models;
 dotenv.config();
 
 const verifyToken = async (req, res, next) => {
-  try {
-    const verify = TokenHelper.decodeToken(req.header('token'), process.env.JWT_KEY);
-    const userExists = await User.findOne({
-      where: { email: verify.email }
+  const token = req.headers.token || req.params.token;
+  if (!token) {
+    res.status(401).json({ error: 'Please log in or Register' });
+  } else {
+    jwt.verify(token, process.env.SECRET_KEY, async (error, decoded) => {
+      if (error) {
+        return res.status(403).json({ error: `${error.message}` });
+      }
+      const userExists = await User.findOne({
+        where: { email: decoded.email }
+      });
+      if (userExists) {
+        req.user = userExists;
+        return next();
+      }
+      return res.status(401).json({ status: 401, error: 'User not recognised. Please create account and try again.' });
     });
-
-    if (userExists) {
-      req.user = userExists;
-      return next();
-    }
-    return res.status(401).json({ status: 401, error: 'User not recognised. Please create account and try again.' });
-  } catch (error) {
-    return res.status(400).json({ status: 400, error: 'Malformed/ Incorrect security token ! Check token and try again.' });
   }
 };
 

@@ -104,15 +104,14 @@ class AuthController {
           role,
           isVerified
         };
-        const myToken = TokenHelper.generateToken(payload);
 
-        res.status(200).json({
+        /** assigns payload to req.user */
+        req.login(payload, { session: false }, () => res.status(200).json({
           status: 200,
           message: 'user successfully Sign In',
           data: {
-            token: myToken,
+            token: TokenHelper.generateToken(payload),
             user: {
-              id,
               firstname,
               lastname,
               email,
@@ -120,7 +119,7 @@ class AuthController {
               isVerified
             }
           }
-        });
+        }));
       },
     )(req, res);
   }

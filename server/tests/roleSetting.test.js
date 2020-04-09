@@ -1,4 +1,4 @@
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
 
@@ -15,75 +15,115 @@ let superAdminDummy2Token;
 let notAdminValidToken;
 const invalidToken = 'eyJhbGciOiJIUzi1NiIsInR5cCI6IkpXVCJ9.erefdsrfresdasd333eyJTWFuemkiLCJ1c2VybmFtZSI6Im1hbnppIiwiZW1haWwiOiJtYW56aUBnbWFpbC5jb20iLCJpYXQiOjE1ODA4MjA1MTZ9.jPcc3YOJCGZaq-3Y-hQNQG_VlzijnocglCg5b0twHYA';
 
-describe('user role setting', () => {
-  it('1.Super admin login', async () => {
-    const res = await router()
-      .post('/api/v1/auth/signin')
-      .send(usersTester[0]);
-    const { data } = res.body;
-    superAdminDummy2Token = data.token;
-    res.should.have.status(200);
-    res.body.should.be.an('object');
-  });
-  it('2.Not super admin login', async () => {
-    const res = await router()
-      .post('/api/v1/auth/signin')
-      .send(usersTester[3]);
-    const { data } = res.body;
-    notAdminValidToken = data.token;
-    res.should.have.status(200);
-    res.body.should.be.an('object');
-  });
 
-  it('3.a signed in super admin should be able to update a particular user role ', async () => {
-    const res = await router()
+before((done) => {
+  router()
+    .post('/api/v1/auth/signin')
+    .send(usersTester[0])
+    .end((err, res) => {
+      const { data } = res.body;
+      superAdminDummy2Token = data.token;
+      done(err);
+    });
+});
+
+before((done) => {
+  router()
+    .post('/api/v1/auth/signin')
+    .send(usersTester[3])
+    .end((err, res) => {
+      const { data } = res.body;
+      notAdminValidToken = data.token;
+      done(err);
+    });
+});
+
+describe('user role setting', () => {
+  it('1.a signed in super admin should be able to update a particular user role ', (done) => {
+    router()
       .patch('/api/v1/users/4/role')
       .send(validRole)
-      .set('token', superAdminDummy2Token);
-    res.should.have.status(200);
-    res.body.should.have.property('message', 'user role updated successfully');
+      .set('token', superAdminDummy2Token)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('message');
+        done(err);
+      });
   });
 
-  it('4.a signed in super admin should not be able to update a particular user role with invalid input', async () => {
-    const res = await router()
+  it('2.a signed in super admin should not be able to update a particular user role with invalid input', (done) => {
+    router()
       .patch('/api/v1/users/4/role')
       .send(invalidRole)
-      .set('token', superAdminDummy2Token);
-    res.should.have.status(400);
-    res.body.should.have.property('error');
+      .set('token', superAdminDummy2Token)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
   });
 
-  it('5.should not update the role of a non registered user', async () => {
-    const res = await router()
+  it('3.should not update the role of a non registered user', (done) => {
+    router()
       .patch('/api/v1/users/500/role')
       .send(validRole)
-      .set('token', superAdminDummy2Token);
-    res.should.have.status(404);
-    res.body.should.have.property('error');
+      .set('token', superAdminDummy2Token)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
   });
 
-  it('6.should be able to update user role with invalid credentials(token)', async () => {
-    const res = await router()
+  it('4.should be able to update user role with invalid credentials(token)', (done) => {
+    router()
       .patch('/api/v1/users/4/role')
       .send(validRole)
-      .set('token', invalidToken);
-    res.should.have.status(400);
-    res.body.should.have.property('error');
+      .set('token', invalidToken)
+      .end((err, res) => {
+        expect(res).to.have.status(403);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
   });
 
-  it('7.super admin should be the only person able to update a particular user role ', async () => {
-    const res = await router()
+  it('5.super admin should be the only person able to update a particular user role ', (done) => {
+    router()
       .patch('/api/v1/users/4/role')
       .send(validRole)
-      .set('token', notAdminValidToken);
-    res.should.have.status(401);
-    res.body.should.have.property('error', 'Sorry! you don\'t have the permission');
+      .set('token', notAdminValidToken)
+      .end((err, res) => {
+        expect(res).to.have.status(401);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
   });
-  it('8.super admin should not be able to update user without token', async () => {
-    const res = await router()
+  it('6.super admin should not be able to update user without token', (done) => {
+    router()
       .patch('/api/v1/users/4/role')
-      .send(validRole);
-    res.should.have.status(400);
-    res.body.should.be.an('object');
+      .send(validRole)
+      .end((err, res) => {
+        expect(res).to.have.status(401);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
+  });
+  it('7.should be able to update user role with invalid credentials(token)', (done) => {
+    router()
+      .patch('/api/v1/users/4/role')
+      .send(validRole)
+      .set('token', 1)
+      .end((err, res) => {
+        expect(res).to.have.status(403);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
   });
 });

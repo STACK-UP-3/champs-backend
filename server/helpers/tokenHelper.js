@@ -10,17 +10,6 @@ dotenv.config();
  */
 class TokenHelper {
   /**
-   * token decoding.
-   * @param {string} token The user's token.
-   * @param {string} secrectKey The secret key.
-   * @returns {string} The users's hashed password.
-   */
-  static decodeToken(token, secrectKey) {
-    const isToken = jwt.verify(token, secrectKey);
-    return isToken;
-  }
-
-  /**
    * Generating a token.
    * @param {integer} id The user's id.
    * @param {string} firstname The user's username.
@@ -34,8 +23,14 @@ class TokenHelper {
     id, firstname, lastname, email, role, isVerified
   }) {
     const generatedToken = jwt.sign({
-      id, firstname, lastname, email, role, isVerified
-    }, process.env.JWT_KEY);
+      id,
+      firstname,
+      lastname,
+      email,
+      role,
+      isVerified,
+      expiresIn: '2h',
+    }, process.env.SECRET_KEY);
     return generatedToken;
   }
 }

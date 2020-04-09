@@ -71,7 +71,7 @@ class AuthHelper {
   static async createToken(data) {
     try {
       const token = jwt.sign(
-        data, process.env.JWT_KEY,
+        data, process.env.SECRET_KEY,
         { expiresIn: '2h' }
       );
       return token;
@@ -87,7 +87,7 @@ class AuthHelper {
    */
   static verifyToken(token) {
     try {
-      const data = jwt.verify(token, process.env.JWT_KEY);
+      const data = jwt.verify(token, process.env.SECRET_KEY);
       return data;
     } catch (err) {
       return err;

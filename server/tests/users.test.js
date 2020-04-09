@@ -1,4 +1,4 @@
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
 
@@ -9,36 +9,58 @@ const router = () => chai.request(app);
 
 let superAdminDummy2Token;
 
+before((done) => {
+  router()
+    .post('/api/v1/auth/signin')
+    .send(usersTester[0])
+    .end((err, res) => {
+      const { data } = res.body;
+      superAdminDummy2Token = data.token;
+      done(err);
+    });
+});
+
 describe('Users test suite', () => {
-  it('1.Super admin login', async () => {
-    const res = await router()
-      .post('/api/v1/auth/signin')
-      .send(usersTester[0]);
-    const { data } = res.body;
-    superAdminDummy2Token = data.token;
-    res.should.have.status(200);
-    res.body.should.be.an('object');
-  });
-  it('2.should get users with page and limit', async () => {
-    const res = await router()
+  it('1.should get users with page and limit', (done) => {
+    router()
       .get('/api/v1/users/?page=1&limit=4')
-      .set('token', superAdminDummy2Token);
-    res.should.have.status(200);
-    res.body.should.be.an('object');
+      .set('token', superAdminDummy2Token)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('object');
+        done(err);
+      });
   });
-  it('3.should get users', async () => {
-    const res = await router()
+  it('2.should get users', (done) => {
+    router()
       .get('/api/v1/users/')
-      .set('token', superAdminDummy2Token);
-    res.should.have.status(200);
-    res.body.should.be.an('object');
+      .set('token', superAdminDummy2Token)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('object');
+        done(err);
+      });
   });
-  it('4.should get error if send wrong query', async () => {
-    const res = await router()
+  it('3.should get error if send wrong query', (done) => {
+    router()
       .get('/api/v1/users/?page=sadsd&limit=sdfds')
-      .set('token', superAdminDummy2Token);
-    res.should.have.status(400);
-    res.body.should.be.an('object');
-    res.body.should.have.property('error');
+      .set('token', superAdminDummy2Token)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
+  });
+  it('3.should get error if send wrong query', (done) => {
+    router()
+      .get('/api/v1/users/?page=2&limit=1')
+      .set('token', superAdminDummy2Token)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('message');
+        done(err);
+      });
   });
 });
