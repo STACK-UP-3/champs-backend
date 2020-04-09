@@ -35,7 +35,7 @@ class TokenHelper {
   }) {
     const generatedToken = jwt.sign({
       id, firstname, lastname, email, role, isVerified
-    }, process.env.SECRET_KEY);
+    }, process.env.JWT_KEY);
     return generatedToken;
   }
 }

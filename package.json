@@ -11,7 +11,7 @@
     ]
   },
   "scripts": {
-    "test": "npm run droptables:test && npm run migrate:test && env NODE_ENV=test nyc mocha --require @babel/polyfill --require @babel/register server/tests/*.js* --recursive --timeout 10000 --exit",
+    "test": "npm run droptables:test && npm run migrate:test && env NODE_ENV=test nyc mocha --require @babel/polyfill --require @babel/register server/tests/*.js* --recursive --timeout 200000 --exit",
     "local:coveralls": "nyc npm run test && nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "migrate": "sequelize db:migrate & sequelize db:seed:all",
