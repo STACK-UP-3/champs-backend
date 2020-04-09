@@ -37,7 +37,17 @@ module.exports = {
         isVerified: true,
         createdAt: new Date(),
         updatedAt: new Date(),
+      },
+      {
+        firstname: 'ag',
+        lastname: 'gy',
+        email: 'aggyreina@gmail.com',
+        password: 'aggy',
+        isVerified: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       }
+
     ],
     {},
   ),
