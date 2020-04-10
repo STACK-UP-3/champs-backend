@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import passport from 'passport';
 
 import AuthHelper from '../helpers/authHelpers';
-
+import TokenHelper from '../helpers/tokenHelper';
 /**
  * This class contains all methods
  * required to handle all
@@ -37,9 +37,14 @@ class AuthController {
       if (mail.isSent === true) {
         res.status(201).send({
           status: 201,
-          message: 'Account succesfully created, check your email to confirm',
+          message: 'Account succesfully created, check your email to confirm'
         });
       }
+    } else {
+      res.status(500).send({
+        status: 500,
+        message: 'Internal server error'
+      });
     }
   }
 
@@ -76,12 +81,12 @@ class AuthController {
     passport.authenticate(
       'local',
       { session: false },
-      async (error, user) => {
+      (error, user) => {
         if (error || !user) {
           return res.status(404).json({ error });
         }
         const {
-          id, firstname, lastname, email, isVerified
+          id, firstname, lastname, email, role, isVerified
         } = user;
 
         /** This is what goes in our JWT */
@@ -90,19 +95,21 @@ class AuthController {
           firstname,
           lastname,
           email,
+          role,
           isVerified
         };
-        const token = await AuthHelper.createToken(payload);
+
         /** assigns payload to req.user */
         req.login(payload, { session: false }, () => res.status(200).json({
           status: 200,
           message: 'user successfully Sign In',
           data: {
-            token,
+            token: TokenHelper.generateToken(payload),
             user: {
               firstname,
               lastname,
               email,
+              role,
               isVerified
             }
           }
