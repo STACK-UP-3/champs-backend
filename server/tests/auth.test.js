@@ -70,12 +70,25 @@ describe('POST data to SIGNUP', () => {
   });
 });
 describe('GET token to verify sign up', () => {
-  it('should return an object ', (done) => {
+  it('should not return an object ', (done) => {
     const token = 'ertfyguhajbdcgacbadjcmadivjdahnvvadcdvhbvdbavbdavdahvdhadndan;adnvjladbvdbhdkabbvabvbfv';
     router()
       .get(`/api/v1/auth/verify/${token}`)
       .end((err, res) => {
         expect(res).to.have.status(400);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('message');
+        done(err);
+      });
+  });
+
+  it('should return an object ', (done) => {
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZ2d5cmVpbmFAZ21haWwuY29tIiwiaWF0IjoxNTg2Mzg3NDk3fQ.G2huyQ7JiLvQjgaaUIkXZNXs0OHwRY35RirFgOGkV3I';
+    router()
+      .get(`/api/v1/auth/verify/${token}`)
+      .end((err, res) => {
+        console.log(res.body);
+        expect(res).to.have.status(200);
         expect(res.body).to.be.a('object');
         expect(res.body).to.have.property('message');
         done(err);

@@ -62,6 +62,16 @@ const up = (queryInterface) => queryInterface.bulkInsert(
     isVerified: true,
     createdAt: new Date(),
     updatedAt: new Date(),
+  },
+  {
+    firstname: 'ag',
+    lastname: 'gy',
+    email: 'aggyreina@gmail.com',
+    password: 'aggy',
+    role: 'Manager',
+    isVerified: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   }
   ], {},
 );

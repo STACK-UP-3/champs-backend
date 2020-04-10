@@ -11,9 +11,19 @@ export const signupSchema = Joi.object().keys({
     .required()
 });
 
-
 export const signinSchema = Joi.object().keys({
   email: Joi.string().email().max(30).required(),
   password: Joi.string().alphanum().min(6).max(30)
     .required()
+});
+
+export const resetSchema = Joi.object({
+  email: Joi.string().email().required()
+});
+
+export const updatePasswordSchema = Joi.object({
+  password: Joi.string().alphanum().min(6).max(30)
+    .required(),
+  passwordConfirm: Joi.string().alphanum().min(6).max(30)
+    .required(),
 });
