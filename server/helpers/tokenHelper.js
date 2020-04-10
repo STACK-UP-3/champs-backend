@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
 dotenv.config();
-const { JWT_EXPIRES_MS } = process.env;
 
 /**
  * This class contains.
@@ -11,26 +10,20 @@ const { JWT_EXPIRES_MS } = process.env;
  */
 class TokenHelper {
   /**
-   * Generating a token.
-   * @param {integer} id The user's id.
-   * @param {string} firstname The user's username.
-   * @param {string} lastname The user's username.
-   * @param {string} email The user's email.
-   * @param {string} role The user's role.
-   * @param {string} isVerified The user's isVerified.
-   * @returns {string} The users's hashed password.
+   * This method creates token used to confirm email.
+   * @param {object} data the object that contain the data that is embedded with token.
+   * @returns {String}  token created .
    */
-  static generateToken(id, firstname, lastname, email, role, isVerified) {
-    const generatedToken = jwt.sign({
-      id,
-      firstname,
-      lastname,
-      email,
-      role,
-      isVerified,
-      expires: Date.now() + parseInt(JWT_EXPIRES_MS, 4),
-    }, process.env.SECRET_KEY);
-    return generatedToken;
+  static async createToken(data) {
+    try {
+      const token = jwt.sign(
+        data, process.env.SECRET_KEY,
+        { expiresIn: '2h' }
+      );
+      return token;
+    } catch (error) {
+      return error;
+    }
   }
 }
 export default TokenHelper;

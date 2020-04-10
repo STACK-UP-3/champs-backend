@@ -98,7 +98,7 @@ class authHelper {
   static async createUser(data) {
     const result = await User.create(data, {
       fields: [
-        'lastname', 'firstname', 'email', 'password', 'isVerified'
+        'lastname', 'firstname', 'email', 'password', 'role', 'isVerified'
       ]
     });
     return result;

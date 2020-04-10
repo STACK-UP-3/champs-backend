@@ -6,7 +6,7 @@ cache:
   directories:
     - "node_modules"
 services:
-  - postgresql  
+  - postgresql
 
 before_script:
   - psql -c "create database test_env ;" -U postgres

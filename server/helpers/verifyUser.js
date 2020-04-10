@@ -1,4 +1,3 @@
-
 import AuthHelpers from './authHelpers';
 import passwordHashHelper from './passwordHandler';
 
