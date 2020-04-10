@@ -112,7 +112,7 @@ class authHelper {
    */
   static async createToken(data) {
     try {
-      const token = jwt.sign(
+      const token = await jwt.sign(
         data, process.env.SECRET_KEY,
         { expiresIn: '2h' }
       );
