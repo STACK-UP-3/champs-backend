@@ -9,7 +9,6 @@ export default (sequelize, DataTypes) => {
       isVerified: { type: DataTypes.BOOLEAN },
       role: { type: DataTypes.STRING },
     },
-    {},
   );
   return User;
 };

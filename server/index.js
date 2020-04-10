@@ -13,18 +13,14 @@ import passportConfig from './config/passport';
 dotenv.config();
 const { sequelize } = db;
 
-
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-
 const port = process.env.PORT || 3000;
 const basePath = '/api/v1';
 
 app.use(passport.initialize());
 passportConfig(passport);
-
 sequelize.sync().then(() => {
   app.listen(port, () => {
     logger.info(`Database succesfully connected and server listening on ${port}`);
@@ -41,5 +37,4 @@ app.get('**', (req, res) => {
     data: '/api/v1/documentation'
   });
 });
-
 export default app;
