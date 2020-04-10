@@ -34,7 +34,7 @@ class ResetController {
     } else {
       return res.status(404).json({
         status: 404,
-        message: 'Invalid email, double-check it!',
+        message: 'User not registered in our system!',
       });
     }
   }

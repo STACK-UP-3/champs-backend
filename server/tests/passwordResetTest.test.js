@@ -12,6 +12,7 @@ describe('Test resetting user password endpoint', () => {
     password: 'aggggg',
     passwordConfirm: 'aggggg',
     password0: 'were123',
+    noPassword: '',
   };
 
   it('should send a password reset link email to a user', (done) => {
@@ -55,6 +56,18 @@ describe('Test resetting user password endpoint', () => {
         expect(res.body.status).to.be.equal(400);
         expect(res.body).to.be.a('object');
         expect(res.body).to.have.property('message');
+        done();
+      });
+  });
+
+
+  it('should not update user password, password required!', (done) => {
+    router()
+      .post(process.env.TEST_URL)
+      .send({ password: user.noPassword, passwordConfirm: user.password0 })
+      .end((err, res) => {
+        expect(res.body.status).to.be.equal(422);
+        expect(res.body).to.have.property('error');
         done();
       });
   });
