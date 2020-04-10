@@ -9,6 +9,6 @@ router.post('/signup', validateAuth.validateSignup, checkUser.isUser, AuthContro
 router.get('/verify/:token', AuthController.verifyEmail);
 router.post('/signin', validateAuth.validateSignIn, AuthController.signIn);
 router.post('/reset-link', validateAuth.validateResetPassword, ResetController.sendResetPasswordLink);
-router.post('/update-password/:email/:token', validateAuth.validateToken, ResetController.updateNewPassword);
+router.post('/update-password/:email/:token', validateAuth.validateUpdateResetPassword, validateAuth.validateToken, ResetController.updateNewPassword);
 
 export default router;
