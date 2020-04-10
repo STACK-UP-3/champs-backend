@@ -41,7 +41,7 @@ class authHelper {
         `,
       };
     } else {
-      url = `http://localhost:3000/api/v1/auth/verify/${token}`;
+      url = `${process.env.VERIFY_URL}/${token}`;
       message = {
         to: email,
         from: 'champsdev2@gmail.com',
