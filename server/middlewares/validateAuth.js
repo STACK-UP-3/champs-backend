@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { signupSchema, signinSchema, resetSchema } from '../schemas/authSchema';
+import {
+  signupSchema, signinSchema, resetSchema, updatePasswordSchema
+} from '../schemas/authSchema';
 
 /**
  * This class contains all methods
@@ -60,6 +62,28 @@ class validateAuth {
      */
   static validateResetPassword(req, res, next) {
     const { error } = resetSchema.validate(req.body);
+    const valid = error == null;
+    if (valid) {
+      next();
+    } else {
+      const { details } = error;
+      const message = details.map(i => i.message).join(',');
+      res.status(422).json({
+        status: 422,
+        error: message
+      });
+    }
+  }
+
+  /**
+       * This method handle the update of reset password request.
+       * @param {object} req The user's request.
+       * @param {object} res The response.
+       * @param {object} next pass to next method.
+       * @returns {object} The error and some error messages .
+       */
+  static validateUpdateResetPassword(req, res, next) {
+    const { error } = updatePasswordSchema.validate(req.body);
     const valid = error == null;
     if (valid) {
       next();
