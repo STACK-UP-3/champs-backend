@@ -87,7 +87,6 @@ describe('GET token to verify sign up', () => {
     router()
       .get(`/api/v1/auth/verify/${token}`)
       .end((err, res) => {
-        console.log(res.body);
         expect(res).to.have.status(200);
         expect(res.body).to.be.a('object');
         expect(res.body).to.have.property('message');
