@@ -1,214 +1,310 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "Barefoot Normads",
-      "description": "Barefoot Normads done by Champs in Stackup 3.",
-      "contact": {}
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Barefoot Normads",
+    "description": "Barefoot Normads done by Champs in Stackup 3.",
+    "contact": {}
+  },
+  "host": "https://champs-bn-api.herokuapp.com/",
+
+  "securityDefinitions": {},
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+
+  "paths": {
+    "/api/v1/signin": {
+      "post": {
+        "description": "",
+        "summary": "user login",
+        "tags": [
+          "Sign In"
+        ],
+        "operationId": "signIn",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+
+          {
+            "name": "email",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "password"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User signed in successfully"
+          },
+          "400": {
+            "description": "Incorrect email or password"
+          },
+          "404": {
+            "description": "User does not exist!"
+          }
+        }
+      }
     },
-    "host": "https://champs-bn-api.herokuapp.com/",
-    
-    "securityDefinitions": {},
-    "schemes": [
-      "http",
-      "https"
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    
-    "paths": {
-      "/api/v1/signin": {
-        "post": {
-          "description": "",
-          "summary": "user login",
-          "tags": [
-            "Sign In"
-          ],
-          "operationId": "signIn",
-          "deprecated": false,
-          "produces": [
-            "application/json"
-          ],
-          "consumes": [
-            "application/x-www-form-urlencoded"
-          ],
-          "parameters": [
-          
-            {
-              "name": "email",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "format": "email"
-            },
-            {
-              "name": "password",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "format": "password"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "User signed in successfully"
-            },
-            "400": {
-              "description": "Incorrect email or password"
-            },
-            "404": {
-              "description": "User does not exist!"
-            }
+    "/api/v1/auth/signup": {
+      "post": {
+        "description": "",
+        "summary": "user Signup",
+        "tags": [
+          "signUP"
+        ],
+        "operationId": "signUp",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [{
+            "name": "lastname",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "firstname",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "password"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "user created, verification email was sent"
+          },
+          "422": {
+            "description": "parameter required or invalid input"
+          },
+          "500": {
+            "description": "verification email wasn't sent"
           }
         }
-      },
-      "/api/v1/auth/signup": {
-        "post":{
-          "description": "",
-          "summary": "user Signup",
-          "tags": [
-            "signUP"
-          ],
-          "operationId": "signUp",
-          "deprecated": false,
-          "produces": [
-            "application/json"
-          ],
-          "consumes": [
-            "application/x-www-form-urlencoded"
-          ],
-          "parameters": [
-            {
-              "name": "lastname",
-              "in": "formData",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "firstname",
-              "in": "formData",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "email",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "format": "email"
-            },
-            {
-              "name": "password",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "format": "password"
-            }
-          ],
-          "responses": {
-            "201": {
-              "description": "user created, verification email was sent"
-            },
-            "422": {
-              "description": "parameter required or invalid input"
-            },
-            "500": {
-              "description": "verification email wasn't sent"
-            }
-          }
-        }
-      },
-      "/api/v1/reset-link": {
-        "post": {
+      }
+    },
+    "/api/v1/reset-link": {
+      "post": {
         "summary": "Send Email to reset password",
         "description": "User can get an email to reset password, endpoint",
         "tags": [
-            "Reset password"
-          ],
-          "operationId": "resetPassword",
-          "deprecated": false,
-          "produces": [
-            "application/json"
-          ],
-          "consumes": [
-            "application/x-www-form-urlencoded"
-          ],
-          "parameters": [
-          
-            {
-              "name": "email",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "format": "email"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "The email has been sent successfully."
-            },
-            "400": {
-              "description": "Email must be valid"
-            },
-            "404": {
-              "description": "Sorry! This email does not exist in Barefoot system."
-            }
+          "Reset password"
+        ],
+        "operationId": "resetPassword",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+
+          {
+            "name": "email",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The email has been sent successfully."
+          },
+          "400": {
+            "description": "Email must be valid"
+          },
+          "404": {
+            "description": "Sorry! This email does not exist in Barefoot system."
           }
         }
-      },
-      "/api/v1/update-password/{email}/{token}": {
-        "post": {
+      }
+    },
+    "/api/v1/update-password/{email}/{token}": {
+      "post": {
         "summary": "Update password",
         "description": "User can update password, endpoint",
         "tags": [
-            "Reset password"
-          ],
-          "operationId": "updatePassword",
-          "deprecated": false,
-          "produces": [
-            "application/json"
-          ],
-          "consumes": [
-            "application/x-www-form-urlencoded"
-          ],
-          "parameters": [
-            
-            {
-              "name": "password",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "format": "password"
-            }
-            ,
-            {
-              "name": "passwordMatched",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "format": "password"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "The password has been updated successfully."
-            },
-            "400": {
-              "description": "password must be a valid email"
-            },
-            "401": {
-              "description": "Sorry, the Token is invalid"
-            },
-            "404": {
-              "description": "Sorry! The user does not exist."
-            }
+          "Reset password"
+        ],
+        "operationId": "updatePassword",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "password"
+          },
+          {
+            "name": "passwordMatched",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "password"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The password has been updated successfully."
+          },
+          "400": {
+            "description": "password must be a valid email"
+          },
+          "401": {
+            "description": "Sorry, the Token is invalid"
+          },
+          "404": {
+            "description": "Sorry! The user does not exist."
           }
         }
-      }     
+      }
+    },
+    "/users/{userId}/role": {
+      "patch": {
+        "description": "A super administrator can assign roles to users by using their userId",
+        "summary": "Update a User's role",
+        "tags": [
+          "Role"
+        ],
+        "operationId": "UpdateRole",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "in": "path",
+            "name": "userId",
+            "type": "string",
+            "description": "userId of a user whose role is about to be updated"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "Super administrator is able to change roles of a particular user",
+            "schema": {
+              "$ref": "#/definitions/roleUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "role is updated successfuly",
+            "headers": {}
+          },
+          "400": {
+            "description": "token is malformed/invalid or role field is not valid",
+            "headers": {}
+          },
+          "401": {
+            "description": "the requester is not logged in, doesn't have an account or doesn't have Super Administrator privileges",
+            "headers": {}
+          },
+          "404": {
+            "description": "user with the provided id doesn't exist",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/users/?page={page}&limit={limit}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Viewing all users",
+        "description": "super admin can view all user",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "token identify that a user has signed in"
+          },
+          {
+            "in": "path",
+            "name": "page",
+            "type": "string",
+            "required": true,
+            "description": "parsing a page number"
+          },
+          {
+            "in": "path",
+            "name": "limit",
+            "type": "string",
+            "required": true,
+            "description": "parsing a limits of data per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "users successfuly retrieved"
+          },
+          "400": {
+            "description": "Malformed/ Incorrect security token ! Check token and try again."
+          },
+          "401": {
+            "description": "User not recognised. Please create account and try again./ Already logged out. Sign in and try again."
+          }
+        }
+      }
+    }
+  }
 }
-}
-

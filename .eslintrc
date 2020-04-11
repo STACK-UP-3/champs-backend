@@ -13,33 +13,56 @@
         "consistent-return": 0,
         "no-param-reassign": 0,
         "comma-dangle": 0,
-        "arrow-parens":"off",
-        "curly": ["error", "multi-line"],
-        "prefer-destructuring": ["error", {
-            "array": true,
-            "object": true
-          }, {
-            "enforceForRenamedProperties": false
-          }],
-        "import/no-unresolved": [2, {
-            "commonjs": true
-        }],
-        "no-plusplus" : "error",
-        "no-shadow": ["error", {
-            "allow": ["req", "res", "err"]
-        }],
-        "valid-jsdoc": ["error", {
-            "requireReturn": true,
-            "requireReturnType": true,
-            "requireParamDescription": false,
-            "requireReturnDescription": true
-        }],
-        "require-jsdoc": ["error", {
-            "require": {
-                "FunctionDeclaration": true,
-                "MethodDefinition": true,
-                "ClassDeclaration": true
+        "arrow-parens": "off",
+        "curly": [
+            "error",
+            "multi-line"
+        ],
+        "prefer-destructuring": [
+            "error",
+            {
+                "array": true,
+                "object": true
+            },
+            {
+                "enforceForRenamedProperties": false
             }
-        }]
+        ],
+        "import/no-unresolved": [
+            2,
+            {
+                "commonjs": true
+            }
+        ],
+        "no-plusplus": "error",
+        "no-shadow": [
+            "error",
+            {
+                "allow": [
+                    "req",
+                    "res",
+                    "err"
+                ]
+            }
+        ],
+        "valid-jsdoc": [
+            "error",
+            {
+                "requireReturn": true,
+                "requireReturnType": true,
+                "requireParamDescription": false,
+                "requireReturnDescription": true
+            }
+        ],
+        "require-jsdoc": [
+            "error",
+            {
+                "require": {
+                    "FunctionDeclaration": true,
+                    "MethodDefinition": true,
+                    "ClassDeclaration": true
+                }
+            }
+        ]
     }
 }

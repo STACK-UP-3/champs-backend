@@ -1,9 +1,15 @@
+import dotenv from 'dotenv';
+
 import logger from '../config/winston';
+
+dotenv.config();
 
 const bnLog = (func) => (req, res) => {
   const { method, originalUrl } = req;
   try {
-    logger.info(`server - session: started ${method} ${originalUrl}`);
+    if (process.env.NODE_ENV !== 'test') {
+      logger.info(`server - session: started ${method} ${originalUrl}`);
+    }
     func(req, res, logger);
   } catch (e) {
     logger.error(`server - session: failed & ${e}`);
