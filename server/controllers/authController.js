@@ -87,7 +87,7 @@ class AuthController {
           return res.status(404).json({ error });
         }
         const {
-          id, firstname, lastname, email, username, isVerified
+          id, firstname, lastname, email, role, lineManager, username, isVerified
         } = user;
 
         /** This is what goes in our JWT */
@@ -97,6 +97,8 @@ class AuthController {
           lastname,
           email,
           username,
+          role,
+          lineManager,
           isVerified
         };
         const token = await AuthHelper.createToken(payload);
@@ -111,6 +113,7 @@ class AuthController {
               lastname,
               email,
               username,
+              role,
               isVerified
             }
           }

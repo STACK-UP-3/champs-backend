@@ -57,7 +57,7 @@ let userToken;
 before((done) => {
   const userLogin = {
     email: 'dummydata01@example.com',
-    password: '123456'
+    password: '123456789'
   };
   router()
     .post('/api/v1/auth/signin')

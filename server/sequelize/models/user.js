@@ -2,13 +2,14 @@ export default (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
     {
-      lastname: { type: DataTypes.STRING },
-      firstname: { type: DataTypes.STRING },
-      email: { type: DataTypes.STRING },
-      username: { type: DataTypes.STRING },
-      password: { type: DataTypes.STRING },
-      isVerified: { type: DataTypes.BOOLEAN },
-      role: { type: DataTypes.STRING },
+      lastname: DataTypes.STRING,
+      firstname: DataTypes.STRING,
+      email: DataTypes.STRING,
+      username: DataTypes.STRING,
+      password: DataTypes.STRING,
+      isVerified: DataTypes.BOOLEAN,
+      role: DataTypes.STRING,
+      lineManager: DataTypes.INTEGER,
       gender: DataTypes.STRING,
       birthDate: DataTypes.DATE,
       preferredLanguage: DataTypes.STRING,
@@ -19,5 +20,17 @@ export default (sequelize, DataTypes) => {
       inAppNotifications: DataTypes.BOOLEAN
     },
   );
+  User.associate = (models) => {
+    User.hasMany(models.Trip, {
+      foreignKey: 'userId',
+      as: 'Trips',
+      onDelete: 'CASCADE',
+    });
+    User.hasMany(models.User, {
+      foreignKey: 'lineManager',
+      as: 'Users',
+      onDelete: 'CASCADE'
+    });
+  };
   return User;
 };

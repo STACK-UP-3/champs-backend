@@ -11,21 +11,26 @@ class PaginateData {
      * @returns {object} The paginated data.
      */
   static paginatedRetrievedData(req, res) {
-    req.data.paginate.paginate = req.data.userAllData;
-    if (req.data.start > 0) {
+    req.data.paginate.results = req.data.paginatedData;
+    const {
+      start, end, dataCount, pages, skip
+    } = req.data;
+    const totalPage = Math.ceil(dataCount / skip);
+    if (start > 0) {
       req.data.paginate.Previous = {
-        page: req.data.pages - 1,
-        limit: req.data.skip
+        page: pages - 1,
+        limit: skip
       };
-    } if (req.data.end < req.data.countUserData) {
+    } if (end < dataCount) {
       req.data.paginate.Next = {
-        page: req.data.pages + 1,
-        limit: req.data.skip
+        page: pages + 1,
+        limit: skip
       };
     }
     return res.status(200).json({
       status: 200,
-      message: `${req.user.email} Those are data from this page ${req.data.pages}`,
+      message: `Those are data from page ${req.data.pages}`,
+      pages: totalPage,
       data: req.data.paginate
     });
   }
