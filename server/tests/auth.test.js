@@ -1,28 +1,34 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
+import { config } from 'dotenv';
 import app from '../index';
 
+config();
 chai.use(chaiHttp);
 const router = () => chai.request(app);
 describe('POST data to SIGNUP', () => {
   const user = [{
     lastname: 'Dummy',
-    firstname: 'Datao1',
-    email: 'brian.ineza@gmail.com',
+    firstname: 'Data01',
+    email: 'dummyData0001@gmail.com',
+    username: 'dummydata001',
     password: '123456',
   }, {
     lastname: 'Dummy',
     firstname: 'Data02',
     email: 'chgris02gmail.com',
+    username: 'dummydatao2',
     password: '123456',
   }, {
     lastname: 'Dummy',
     firstname: 'Data02',
-    email: 'brian.ineza@gmail.com',
+    email: 'dummyData0001@gmail.com',
+    username: 'dummydatao1',
     password: '123456',
   }, {
     lastname: 'Dummy',
     firstname: 'Data03',
+    username: 'dummydatao1',
     email: 'dummydata03@gmail.co',
   }];
   it('should signup user', (done) => {

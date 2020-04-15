@@ -17,7 +17,7 @@ class AuthController {
    */
   static async signUp(req, res) {
     const {
-      lastname, firstname, email, password
+      lastname, firstname, email, username, password
     } = req.body;
     const role = 'Requester';
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,6 +25,7 @@ class AuthController {
       lastname,
       firstname,
       email,
+      username,
       role,
       password: hashedPassword,
       isVerified: false
@@ -33,7 +34,8 @@ class AuthController {
     if (user) {
       const token = await AuthHelper.createToken({
         id: user.id,
-        email
+        email,
+        username
       });
       const mail = await AuthHelper.sendMail(email, token);
       if (mail.isSent === true) {
@@ -53,11 +55,13 @@ class AuthController {
    */
   static async verifyEmail(req, res) {
     const { token } = req.params;
-    const { id } = await AuthHelper.verifyToken(token);
+    const { id, email, username } = await AuthHelper.verifyToken(token);
     if (id) {
       AuthHelper.verifyUser(id);
       res.status(200).send({
         userid: id,
+        email,
+        username,
         message: ' Your email has been successfully verified',
       });
     } else {
@@ -83,7 +87,7 @@ class AuthController {
           return res.status(404).json({ error });
         }
         const {
-          id, firstname, lastname, email, role, isVerified
+          id, firstname, lastname, email, username, isVerified
         } = user;
 
         /** This is what goes in our JWT */
@@ -92,7 +96,7 @@ class AuthController {
           firstname,
           lastname,
           email,
-          role,
+          username,
           isVerified
         };
         const token = await AuthHelper.createToken(payload);
@@ -106,6 +110,7 @@ class AuthController {
               firstname,
               lastname,
               email,
+              username,
               isVerified
             }
           }

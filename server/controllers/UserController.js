@@ -1,5 +1,6 @@
 import UserHelpers from '../helpers/UserHelper';
 import pagination from '../helpers/paginationHelper';
+import authHelper from '../helpers/authHelpers';
 
 /**
  * This class contains.
@@ -59,6 +60,66 @@ class UserController {
         error: error.message
       });
     }
+  }
+
+  /**
+   * This method handle the update profile request.
+   * @param {object} req The user's request.
+   * @param {object} res The response.
+   * @returns {object} The status and some data of the user.
+   */
+  static async updateProfile(req, res) {
+    const { token } = req.headers;
+    const { id } = authHelper.verifyToken(token);
+    const {
+      lastname,
+      firstname,
+      username,
+      gender,
+      birthDate,
+      preferredLanguage,
+      preferredCurrency,
+      location,
+      department,
+      emailNotifications,
+      inAppNotifications
+    } = req.body;
+    const data = {
+      lastname,
+      firstname,
+      username,
+      gender,
+      birthDate,
+      preferredLanguage,
+      preferredCurrency,
+      location,
+      department,
+      emailNotifications,
+      inAppNotifications
+    };
+
+    const update = await UserHelpers.updateUser(id, data);
+
+    res.status(200).send({
+      status: 200,
+      message: 'user profile has been successfuly updated',
+      data: update
+    });
+  }
+
+  /**
+* This method handle the retrieves user profile.
+* @param {object} req The user's request.
+* @param {object} res The response.
+* @returns {object} The status and some data of the user profile.
+*/
+  static async retrieveProfile(req, res) {
+    const { username } = req.params;
+    const userProfile = await UserHelpers.userExists('username', username);
+    res.status(200).send({
+      status: 200,
+      data: userProfile
+    });
   }
 }
 

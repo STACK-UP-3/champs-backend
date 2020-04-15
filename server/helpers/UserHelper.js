@@ -17,7 +17,8 @@ class UserHelper {
     const user = await User.findOne({
       where: {
         [attr]: val
-      }
+      },
+      attributes: { exclude: ['password'] }
     });
     return user;
   }
@@ -52,6 +53,31 @@ class UserHelper {
       attributes: { exclude: ['password'] },
     });
     return foundUsers;
+  }
+
+  /**
+   * This method updates the user in the database.
+   * @param {string} id The id of user to update
+   * @param {object} data  User information to be updated.
+   * @returns {object}  some data of the updated user in the database.
+   */
+  static async updateUser(id, data) {
+    try {
+      const affectedRows = await User.update(data, {
+        where: { id },
+        returning: true,
+        plain: true
+      });
+      if (affectedRows) {
+        const user = await User.findAll({
+          where: { id },
+          attributes: { exclude: ['password'] }
+        });
+        return user;
+      }
+    } catch (error) {
+      return error;
+    }
   }
 }
 
