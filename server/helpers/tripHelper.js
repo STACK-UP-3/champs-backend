@@ -3,7 +3,8 @@ import models from '../sequelize/models';
 const {
   Trip,
   User,
-  Place
+  Place,
+  Accommodation
 } = models;
 
 /**
@@ -57,7 +58,8 @@ class TripHelpers {
         'returnDate',
         'status',
         'createAt',
-        'updatedAt'
+        'updatedAt',
+        'accommodationId'
       ]
     });
 
@@ -120,9 +122,18 @@ class TripHelpers {
                 'country',
                 'city',
               ]
+            },
+            {
+              model: Accommodation,
+              as: 'Accommodation',
+              attributes: [
+                'id',
+                'name',
+                'description',
+              ]
             }
           ],
-          attributes: { exclude: ['departure', 'destination'] },
+          attributes: { exclude: ['departure', 'destination', 'accommodationId'] },
         });
       }
     } else {
@@ -164,9 +175,18 @@ class TripHelpers {
                 'country',
                 'city',
               ]
+            },
+            {
+              model: Accommodation,
+              as: 'Accommodation',
+              attributes: [
+                'id',
+                'name',
+                'description',
+              ]
             }
           ],
-        attributes: { exclude: ['departure', 'destination'] },
+        attributes: { exclude: ['departure', 'destination', 'accommodationId'] },
       });
     }
     return foundTrip;
@@ -214,9 +234,18 @@ class TripHelpers {
             'country',
             'city',
           ]
+        },
+        {
+          model: Accommodation,
+          as: 'Accommodation',
+          attributes: [
+            'id',
+            'name',
+            'description',
+          ]
         }
       ],
-      attributes: { exclude: ['departure', 'destination'] },
+      attributes: { exclude: ['departure', 'destination', 'accommodationId'] },
     });
 
     if (!trip) return false;

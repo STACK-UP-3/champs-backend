@@ -98,6 +98,18 @@ const up = (queryInterface) => queryInterface.bulkInsert(
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    firstname: 'ag',
+    lastname: 'gy',
+    email: 'aggy@gmail.com',
+    username: 'dummyData022',
+    password: Hasher.hashPassword('123456'),
+    role: 'Requester',
+    lineManager: 1,
+    isVerified: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
   ], {},
 );
 const down = (queryInterface) => queryInterface.bulkDelete('Users', null, {});

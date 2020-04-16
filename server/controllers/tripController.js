@@ -14,12 +14,15 @@ class TripController {
    * @param {integer} cityNumber The response.
    * @returns {object} The status and some data of the trip.
    */
-  static async setTripType(trip, returnDate) {
-    if (returnDate) {
+  static async setTripType(trip, returnDate, cityNumber) {
+    if (returnDate && cityNumber === 1) {
       trip.returnDate = returnDate;
       trip.tripType = 'Return';
+    } else if (returnDate && cityNumber > 1) {
+      trip.returnDate = returnDate;
+      trip.tripType = 'Multi-city';
     } else {
-      trip.tripType = 'One-way';
+      trip.tripType = 'one-way';
     }
     return trip;
   }
@@ -36,7 +39,7 @@ class TripController {
       const { lineManager } = req.user;
       if (lineManager !== null) {
         const {
-          returnDate, destination, date, reasons, departure
+          returnDate, destination, date, reasons, departure, accommodationId
         } = body;
         const myuserId = req.user.id;
         const pendingStatus = 'pending';
@@ -47,6 +50,7 @@ class TripController {
           date,
           reasons: myReasons,
           userId: myuserId,
+          accommodationId,
           status: pendingStatus
         };
 
@@ -68,6 +72,7 @@ class TripController {
         const saveTrip = await tripHelpers.saveTrip(newTrip);
         saveTrip.departure = req.departure[0];
         saveTrip.destination = req.destination;
+        saveTrip.accommodation = req.accommodation;
 
         return res.status(201).json({
           status: 201,

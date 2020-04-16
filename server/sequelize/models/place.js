@@ -5,6 +5,11 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING
   }, {});
   Place.associate = (models) => {
+    Place.hasMany(models.Accommodation, {
+      foreignKey: 'placeId',
+      as: 'accommodations',
+      onDelete: 'CASCADE'
+    });
     Place.hasMany(models.Trip, {
       foreignKey: 'departure',
       as: 'Departure',

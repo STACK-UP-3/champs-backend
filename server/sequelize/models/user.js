@@ -31,6 +31,11 @@ export default (sequelize, DataTypes) => {
       as: 'Users',
       onDelete: 'CASCADE'
     });
+    User.hasMany(models.Accommodation, {
+      foreignKey: 'createdBy',
+      as: 'accommodations',
+      onDelete: 'CASCADE'
+    });
   };
   return User;
 };

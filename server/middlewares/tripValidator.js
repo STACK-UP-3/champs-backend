@@ -1,6 +1,6 @@
 import tripHelpers from '../helpers/tripHelper';
 import placeHelpers from '../helpers/placeHelper';
-
+import AccommodationHelper from '../helpers/accommodationHelper';
 import { dateValidator, returnDate } from '../helpers/dateValidator';
 import tripSchemas from '../schemas/tripSchema';
 import idSchemas from '../schemas/idValidator';
@@ -77,6 +77,7 @@ class validatetrip {
       user
     } = req;
 
+    const placeIds = body.destination;
     const userId = user.id;
     const tripExists = await tripHelpers.findByReasonOrDate({
       ...body,
@@ -84,12 +85,20 @@ class validatetrip {
     });
     const errors = {};
     const placeExistsFrom = await placeHelpers.placeExist('id', body.departure);
-    const placeExistsTo = await placeHelpers.placeExist('id', body.destination);
+    const placeExistsTo = await placeHelpers.placeExist('id', placeIds);
     const isValideDate = dateValidator(body.date);
     const isRtnDate = returnDate({ dateR: body.returnDate, dateS: body.date });
 
+    const accommodation = {
+      id: body.accommodationId,
+      placeIds
+    };
+    const accommodationExist = await AccommodationHelper.findAccommodation(accommodation);
     if (placeExistsFrom.length === 0) {
       errors.departure = 'choose proper departure location.';
+    }
+    if (!accommodationExist.length === 0) {
+      errors.accommodation = 'choose available accommodation.';
     }
     if (placeExistsTo.length === 0) {
       errors.destination = 'choose proper destination location.';
@@ -114,6 +123,7 @@ class validatetrip {
     }
     req.departure = placeExistsFrom;
     req.destination = placeExistsTo;
+    req.accommodation = accommodationExist;
     next();
   }
 }

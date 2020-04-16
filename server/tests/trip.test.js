@@ -10,7 +10,8 @@ import {
   incoDateTrip,
   incoLocation,
   returnTrip,
-  lowReturnTrip
+  lowReturnTrip,
+  multiCityTrip,
 } from './mochData/trips';
 
 chai.use(chaiHttp);
@@ -190,13 +191,24 @@ describe('Trip test suite', () => {
         done(err);
       });
   });
-  it('12.should get all trip created by the users he/she manage', (done) => {
+  it('12.should not get all trip created by the users he/she manage', (done) => {
     router()
       .get('/api/v1/trips/')
       .set('token', MangerNoUserToken)
       .end((err, res) => {
         expect(res.body.status).to.equal(404);
         expect(res.body).to.be.an('object');
+        done(err);
+      });
+  });
+  it('13.should create a multi-city trip', (done) => {
+    router()
+      .post('/api/v1/trips/')
+      .set('token', notMangerToken)
+      .send(multiCityTrip)
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res.body).to.be.a('object');
         done(err);
       });
   });
