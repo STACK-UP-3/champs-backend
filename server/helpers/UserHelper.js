@@ -1,6 +1,8 @@
 import models from '../sequelize/models';
 
-const { User } = models;
+const {
+  User
+} = models;
 
 /**
  * This class contains.
@@ -8,49 +10,57 @@ const { User } = models;
  */
 class UserHelper {
   /**
- * find a user with a condition.
- * @param {string} attr .
- * @param {string} val .
- * @returns {object} User data.
- */
+   * find a user with a condition.
+   * @param {string} attr .
+   * @param {string} val .
+   * @returns {object} User data.
+   */
   static async userExists(attr, val) {
     const user = await User.findOne({
       where: {
         [attr]: val
       },
-      attributes: { exclude: ['password'] }
+      attributes: {
+        exclude: ['password']
+      },
     });
     return user;
   }
 
   /**
- * update a user with a condition.
- * @param {string} userId .
- * @param {string} role .
- * @returns {object} User data.
- */
-  static async updateRole({ userId, role }) {
+   * update a user with a condition.
+   * @param {string} userId .
+   * @param {string} role .
+   * @returns {object} User data.
+   */
+  static async updateRole({
+    userId,
+    role
+  }) {
     const user = await User.update({
-      role
+      role,
+      updatedAt: new Date()
     }, {
       where: {
         id: userId
-      }
+      },
     });
     return user;
   }
 
   /**
- * get all a user with a condition.
- * @param {string} skip .
- * @param {string} start .
- * @returns {object} User data.
- */
+   * get all a user with a condition.
+   * @param {string} skip .
+   * @param {string} start .
+   * @returns {object} User data.
+   */
   static async getAllUsers(skip, start) {
     const foundUsers = await User.findAndCountAll({
       limit: skip,
       offset: start,
-      attributes: { exclude: ['password'] },
+      attributes: {
+        exclude: ['password']
+      },
     });
     return foundUsers;
   }
@@ -64,14 +74,20 @@ class UserHelper {
   static async updateUser(id, data) {
     try {
       const affectedRows = await User.update(data, {
-        where: { id },
+        where: {
+          id
+        },
         returning: true,
         plain: true
       });
       if (affectedRows) {
         const user = await User.findAll({
-          where: { id },
-          attributes: { exclude: ['password'] }
+          where: {
+            id
+          },
+          attributes: {
+            exclude: ['password']
+          }
         });
         return user;
       }

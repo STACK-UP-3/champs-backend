@@ -32,18 +32,38 @@ module.exports = {
     role: {
       type: Sequelize.STRING,
     },
+    lineManager: {
+      allowNull: true,
+      type: Sequelize.INTEGER,
+    },
     isVerified: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
     },
-    gender: { type: Sequelize.STRING },
-    birthDate: { type: Sequelize.DATEONLY },
-    preferredLanguage: { type: Sequelize.STRING },
-    preferredCurrency: { type: Sequelize.STRING },
-    location: { type: Sequelize.STRING },
-    department: { type: Sequelize.STRING },
-    emailNotifications: { type: Sequelize.BOOLEAN },
-    inAppNotifications: { type: Sequelize.BOOLEAN },
+    gender: {
+      type: Sequelize.STRING
+    },
+    birthDate: {
+      type: Sequelize.DATEONLY
+    },
+    preferredLanguage: {
+      type: Sequelize.STRING
+    },
+    preferredCurrency: {
+      type: Sequelize.STRING
+    },
+    location: {
+      type: Sequelize.STRING
+    },
+    department: {
+      type: Sequelize.STRING
+    },
+    emailNotifications: {
+      type: Sequelize.BOOLEAN
+    },
+    inAppNotifications: {
+      type: Sequelize.BOOLEAN
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

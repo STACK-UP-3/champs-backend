@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
  */
 class Hasher {
   /**
-     * Hashs the password.
+     * This following method hashes a password.
      * @param {string} password The user's password.
      * @returns {string} The users's hashed password.
      */

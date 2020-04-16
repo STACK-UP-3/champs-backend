@@ -12,7 +12,7 @@ class PaginatingData {
  */
   static paginateData({ page, limit }) {
     const paginate = {};
-    const skip = Number(limit || Number.MAX_SAFE_INTEGER);
+    const skip = Number(limit || 10);
     const pages = Number(page || 1);
     const start = Number((pages - 1) * skip);
     const end = page * skip;

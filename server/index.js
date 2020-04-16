@@ -37,7 +37,7 @@ app.get('**', (req, res) => {
   res.status(200).send({
     status: 200,
     message: 'You are Welcome to BareFoot Nomad. Use the link below to navigate to the API Documentation.',
-    data: '/api/v1/documentation'
+    data: `${process.env.SITE_URL}/api/v1/documentation`
   });
 });
 export default app;

@@ -1,5 +1,5 @@
 import AuthHelpers from './authHelpers';
-import passwordHashHelper from './passwordHandler';
+import passwordHashHelper from './passwordHashHelper';
 
 /**
  * This class contains

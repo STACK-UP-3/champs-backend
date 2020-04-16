@@ -14,5 +14,13 @@ export default [
   {
     email: 'notsuperadmin@example.com',
     password: '123456789'
+  },
+  {
+    email: 'chrischris@example.com',
+    password: '123456789'
+  },
+  {
+    email: 'dummydata01@example.com',
+    password: '123456789'
   }
 ];

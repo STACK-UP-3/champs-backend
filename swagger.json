@@ -6,7 +6,8 @@
     "description": "Barefoot Normads done by Champs in Stackup 3.",
     "contact": {}
   },
-  "host": "https://champs-bn-api.herokuapp.com",
+  "host": "champs-bn-api.herokuapp.com",
+  "basePath": "/api/v1",
   "securityDefinitions": {},
   "schemes": [
     "http",
@@ -18,38 +19,29 @@
   "produces": [
     "application/json"
   ],
+
   "paths": {
-    "/api/v1/signin": {
+    "/auth/signin": {
       "post": {
         "description": "",
         "summary": "user login",
         "tags": [
-          "Sign In"
+          "Auth"
         ],
         "operationId": "signIn",
         "deprecated": false,
         "produces": [
           "application/json"
         ],
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "parameters": [
-          {
-            "name": "email",
-            "in": "formData",
-            "required": true,
-            "type": "string",
-            "format": "email"
-          },
-          {
-            "name": "password",
-            "in": "formData",
-            "required": true,
-            "type": "string",
-            "format": "password"
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "signin into user account: Correct user credentials needed to be used for login",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/signin"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "User signed in successfully"
@@ -63,55 +55,28 @@
         }
       }
     },
-    "/api/v1/auth/signup": {
+    "/auth/signup": {
       "post": {
         "description": "",
         "summary": "user Signup",
         "tags": [
-          "signUP"
+          "Auth"
         ],
         "operationId": "signUp",
         "deprecated": false,
         "produces": [
           "application/json"
         ],
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "parameters": [
-          {
-            "name": "lastname",
-            "in": "formData",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "firstname",
-            "in": "formData",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "email",
-            "in": "formData",
-            "required": true,
-            "type": "string",
-            "format": "email"
-          },
-          {
-            "name": "username",
-            "in": "formData",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "in": "formData",
-            "required": true,
-            "type": "string",
-            "format": "password"
+
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Create user account: User credentials needed to be used for signup",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Signup"
           }
-        ],
+        }],
         "responses": {
           "201": {
             "description": "user created, verification email was sent"
@@ -125,28 +90,28 @@
         }
       }
     },
-    "/api/v1/reset-link": {
+    "/auth/reset-link": {
       "post": {
         "summary": "Send Email to reset password",
         "description": "User can get an email to reset password, endpoint",
         "tags": [
-          "Reset password"
+          "Auth"
         ],
         "operationId": "resetPassword",
         "deprecated": false,
         "produces": [
           "application/json"
         ],
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
         "parameters": [
+
           {
-            "name": "email",
-            "in": "formData",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string",
-            "format": "email"
+            "description": "Email which will receve the reset password link",
+            "schema": {
+              "$ref": "#/definitions/resetEmail"
+            }
           }
         ],
         "responses": {
@@ -162,35 +127,42 @@
         }
       }
     },
-    "/api/v1/update-password/{email}/{token}": {
+    "/auth/update-password/{email}/{token}": {
       "post": {
         "summary": "Update password",
         "description": "User can update password, endpoint",
         "tags": [
-          "Reset password"
+          "Auth"
         ],
         "operationId": "updatePassword",
         "deprecated": false,
         "produces": [
           "application/json"
         ],
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
         "parameters": [
+
           {
-            "name": "password",
-            "in": "formData",
+            "name": "email",
+            "in": "path",
             "required": true,
             "type": "string",
-            "format": "password"
+            "description": "Email"
           },
           {
-            "name": "passwordMatched",
-            "in": "formData",
+            "name": "token",
+            "in": "path",
             "required": true,
             "type": "string",
-            "format": "password"
+            "description": "token to reset password"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "password",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updatePassword"
+            }
           }
         ],
         "responses": {
@@ -214,25 +186,25 @@
         "description": "A super administrator can assign roles to users by using their userId",
         "summary": "Update a User's role",
         "tags": [
-          "Role"
+          "Users"
         ],
         "operationId": "UpdateRole",
         "deprecated": false,
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "token",
             "in": "header",
             "required": true,
             "type": "string",
-            "description": ""
+            "description": "token identify that a user has signed in"
           },
           {
             "in": "path",
             "name": "userId",
             "type": "string",
+            "required": true,
             "description": "userId of a user whose role is about to be updated"
           },
           {
@@ -265,15 +237,14 @@
         }
       }
     },
-    "api/v1/users/?page={page}&limit={limit}": {
+    "/users/?page={page}&limit={limit}": {
       "get": {
         "tags": [
-          "users"
+          "Users"
         ],
         "summary": "Viewing all users",
         "description": "super admin can view all user",
-        "parameters": [
-          {
+        "parameters": [{
             "name": "token",
             "in": "header",
             "required": true,
@@ -281,17 +252,19 @@
             "description": "token identify that a user has signed in"
           },
           {
-            "in": "path",
+            "in": "query",
             "name": "page",
-            "type": "string",
-            "required": true,
+            "type": "integer",
+            "required": false,
+            "default": 1,
             "description": "parsing a page number"
           },
           {
-            "in": "path",
+            "in": "query",
             "name": "limit",
-            "type": "string",
-            "required": true,
+            "type": "integer",
+            "required": false,
+            "default": 10,
             "description": "parsing a limits of data per page"
           }
         ],
@@ -308,12 +281,51 @@
         }
       }
     },
-    "/api/v1/user/:username/profile": {
+    "/users/{userId}": {
+      "get": {
+        "description": "super admin can view a specific user",
+        "summary": "View One user",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "ViewOneuser",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "security token"
+          },
+          {
+            "in": "path",
+            "name": "userId",
+            "type": "integer",
+            "required": true,
+            "description": "parsing an user Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {}
+          },
+          "404": {
+            "description": "This users doesn't exist in the database",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/user/{username}/profile": {
       "patch": {
         "description": "",
         "summary": "user update",
         "tags": [
-          "USER"
+          "Users"
         ],
         "operationId": "update",
         "deprecated": false,
@@ -321,10 +333,9 @@
           "application/json"
         ],
         "consumes": [
-          "application/x-www-form-urlencoded"
+          "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "token",
             "in": "header",
             "required": true,
@@ -337,72 +348,13 @@
             "type": "string"
           },
           {
-            "name": "lastname",
-            "in": "formData",
+            "in": "body",
+            "name": "body",
+            "description": "Data needed to update user profile",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "firstname",
-            "in": "formData",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "gender",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "format": "text"
-          },
-          {
-            "name": "birthDate",
-            "in": "formData",
-            "required": false,
-            "type": "date",
-            "format": "date"
-          },
-          {
-            "name": "preferredLanguage",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "format": "string"
-          },
-          {
-            "name": "preferredCurrency",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "format": "string"
-          },
-          {
-            "name": "location",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "format": "string"
-          },
-          {
-            "name": "department",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "format": "string"
-          },
-          {
-            "name": "emailNotifications",
-            "in": "formData",
-            "required": true,
-            "type": "boolean",
-            "format": "boolean"
-          },
-          {
-            "name": "inAppNotifications",
-            "in": "formData",
-            "required": true,
-            "type": "boolean",
-            "format": "boolean"
+            "schema": {
+              "$ref": "#/definitions/profileUpdate"
+            }
           }
         ],
         "responses": {
@@ -424,7 +376,7 @@
         "description": "",
         "summary": "user profile",
         "tags": [
-          "USER"
+          "Users"
         ],
         "operationId": "Retrieve",
         "deprecated": false,
@@ -432,7 +384,7 @@
           "application/json"
         ],
         "consumes": [
-          "application/x-www-form-urlencoded"
+           "application/json"
         ],
         "parameters": [
           {
@@ -447,7 +399,479 @@
             "required": true,
             "type": "string"
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "User succesfully retrieved."
+          },
+          "400": {
+            "description": "you can't retrieve or edit other's profile"
+          },
+          "401": {
+            "description": "authentication failed"
+          },
+          "404": {
+            "description": "Sorry! The user does not exist."
+          }
+        }
+      }
+    },
+    "/places": {
+      "post": {
+        "tags": [
+          "Places"
+        ],
+        "summary": "Places creation",
+        "description": "Super administrator can create a place.",
+        "parameters": [{
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Token identify that a user has signed in"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Data needed to create a place",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PlaceCreation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Place was created successfully."
+          },
+          "422": {
+            "description": "bad data"
+          },
+          "409": {
+            "description": "This place already exists, use diferent name."
+          }
+        }
+      }
+    },
+    "/places/?page={page}&limit={limit}": {
+      "get": {
+        "tags": [
+          "Places"
+        ],
+        "summary": "Viewing all Places",
+        "description": "a user should be able to view  all places",
+        "parameters": [{
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "token to authenticate user to the resources"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "required": false,
+            "default": 1,
+            "description": "parsing a page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "required": false,
+            "default": 10,
+            "description": "parsing a limits of data per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "places successfuly retrieved"
+          },
+          "400": {
+            "description": "Malformed/ Incorrect security token ! Check token and try again."
+          },
+          "401": {
+            "description": "User not recognised. Please create account and try again./ Already logged out. Sign in and try again."
+          }
+        }
+      }
+    },
+    "/places/{placeId}": {
+      "get": {
+        "description": "User can get a specific place",
+        "summary": "View One place",
+        "tags": [
+          "Places"
+        ],
+        "operationId": "ViewOneplace",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "security token"
+          },
+          {
+            "in": "path",
+            "name": "placeId",
+            "type": "integer",
+            "required": true,
+            "description": "parsing an place Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {}
+          },
+          "404": {
+            "description": "This places doesn't exist in the database",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/trips": {
+      "post": {
+        "tags": [
+          "Trips"
+        ],
+        "summary": "Trip creation",
+        "description": "User can create a trip (One Way Trip, Return Trip and choose Multiple City on a trip)",
+        "parameters": [{
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "token identify that a user has signed in"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "data needed to create a trip",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TripCreation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Trip was created successfully."
+          },
+          "422": {
+            "description": "bad data"
+          },
+          "409": {
+            "description": "This trip already exists, use another reasons or date."
+          }
+        }
+      }
+    },
+    "/trips/?page={page}&limit={limit}": {
+      "get": {
+        "tags": [
+          "Trips"
+        ],
+        "summary": "Viewing all trips",
+        "description": "a Requester user views all trip requests they've created, a Manager user views all trip requests",
+        "parameters": [{
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "token identify that a user has signed in"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "required": false,
+            "default": 1,
+            "description": "parsing a page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "required": false,
+            "default": 10,
+            "description": "parsing a limits of data per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "trip requests successfuly retrieved"
+          },
+          "400": {
+            "description": "Malformed/ Incorrect security token ! Check token and try again."
+          },
+          "401": {
+            "description": "User not recognised. Please create account and try again./ Already logged out. Sign in and try again."
+          }
+        }
+      }
+    },
+    "/trips/{tripId}": {
+      "get": {
+        "description": "User can get a specific trip",
+        "summary": "View One trip",
+        "tags": [
+          "Trips"
+        ],
+        "operationId": "retrieveTrip",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "security token"
+          },
+          {
+            "in": "path",
+            "name": "tripId",
+            "type": "integer",
+            "required": true,
+            "description": "parsing an trip Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {}
+          },
+          "401": {
+            "description": "You are not allowed to access this trip",
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "signin": {
+      "title": "Sign in request",
+      "type": "object",
+      "example": {
+        "email": "chrischris@example.com",
+        "password": "123456789"
+      },
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Signup": {
+      "title": "Sign up request",
+      "type": "object",
+      "example": {
+        "firstname": "ama",
+        "lastname": "user",
+        "username": "amauser",
+        "email": "amauser@example.com",
+        "password": "123456789"
+      },
+      "required": [
+        "firstname",
+        "lastname",
+        "username",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "resetEmail": {
+      "title": "Reset password request",
+      "example": {
+        "email": "chrischris@example.com"
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email"
+      ]
+    },
+    "updatePassword": {
+      "title": "Password update request",
+      "example": {
+        "password": "123456789",
+        "passwordConfirm": "123456789"
+      },
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "password"
+        },
+        "passwordConfirm": {
+          "type": "password"
+        }
+      },
+      "required": [
+        "password",
+        "passwordConfirm"
+      ]
+    },
+    "roleUpdate": {
+      "title": "User role update request",
+      "example": {
+        "role": "Travel Administrator"
+      },
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "role"
+      ]
+    },
+    "profileUpdate": {
+      "title": "User profile update request",
+      "example": {
+        "lastname": "thislastname",
+        "firstname": "thisfirstname",
+        "username": "johnDoe",
+        "gender": "Male",
+        "birthDate": "2000-04-03",
+        "preferredLanguage": "English",
+        "preferredCurrency": "RWF",
+        "location": "Kigali",
+        "department": "IT",
+        "emailNotifications": false,
+        "inAppNotifications": true
+      },
+      "type": "object",
+      "properties": {
+        "lastname": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "birthDate": {
+          "type": "date"
+        },
+        "preferredLanguage": {
+          "type": "string"
+        },
+        "preferredCurrency": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "department": {
+          "type": "string"
+        },
+        "emailNotifications": {
+          "type": "boolean"
+        },
+        "inAppNotifications": {
+          "type": "boolean"
+        }
+      }
+    },
+    "PlaceCreation": {
+      "title": "create a place request",
+      "example": {
+        "name": "butare branch",
+        "country": "Rwanda",
+        "city": "Butare"
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "country",
+        "city"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        }
+      }
+    },
+    "TripCreation": {
+      "title": "create a trip request",
+      "example": {
+        "departure": 1,
+        "destination": 2,
+        "date": "2050-09-13",
+        "returnDate": "2050-10-30",
+        "reasons": "hound issues"
+      },
+      "type": "object",
+      "required": [
+        "departure",
+        "destination",
+        "date",
+        "reasons"
+      ],
+      "properties": {
+        "departure": {
+          "type": "integer"
+        },
+        "destination": {
+          "type": "integer"
+        },
+        "date": {
+          "type": "date"
+        },
+        "reasons": {
+          "type": "string"
+        },
+        "returnDate": {
+          "type": "date"
+        }
       }
     }
   }
