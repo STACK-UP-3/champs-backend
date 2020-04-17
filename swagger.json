@@ -24,7 +24,7 @@
     "/auth/signin": {
       "post": {
         "description": "",
-        "summary": "user login",
+        "summary": "User Sign in",
         "tags": [
           "Auth"
         ],
@@ -58,7 +58,7 @@
     "/auth/signup": {
       "post": {
         "description": "",
-        "summary": "user Signup",
+        "summary": "User Sign up",
         "tags": [
           "Auth"
         ],

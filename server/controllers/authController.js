@@ -4,6 +4,7 @@ import UserHelper from '../helpers/userHelper';
 import TokenHelper from '../helpers/tokenHelper';
 import passwordHelper from '../helpers/passwordHelper';
 
+
 /**
  * This class contains all methods
  * required to handle all
@@ -30,6 +31,7 @@ class AuthController {
         username,
         role,
         password: hashedPassword,
+        authType: 'local',
         isVerified: false
       };
       const user = await UserHelper.registerUser(data);
@@ -143,6 +145,56 @@ class AuthController {
       return res.status(500).json({
         status: 500,
         message: 'Something went wrong when signing in',
+        error: error.message
+      });
+    }
+  }
+
+  /**
+     * This method handles Social Sign In request.
+     * @param {object} req The user's request.
+     * @param {object} res The response.
+     * @returns {object} The status and some data of the user.
+     */
+  static async socialSignIn(req, res) {
+    try {
+      const {
+        id, username, firstname, lastname, email, role, authType, isVerified, lineManager
+      } = req.user;
+
+      const token = await TokenHelper.generateToken({
+        id,
+        username,
+        firstname,
+        lastname,
+        lineManager,
+        authType,
+        email,
+        role,
+        isVerified
+      });
+
+      res.status(200).json({
+        status: 200,
+        message: `User successfully signed in with ${authType}`,
+        data: {
+          token,
+          user: {
+            username,
+            firstname,
+            lastname,
+            email,
+            role,
+            lineManager,
+            isVerified,
+            authType
+          }
+        }
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        message: 'Something went wrong when signing in with the social platform',
         error: error.message
       });
     }

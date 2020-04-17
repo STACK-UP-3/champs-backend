@@ -6,7 +6,6 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-
     lastname: {
       type: Sequelize.STRING,
       allowNull: false
@@ -14,6 +13,12 @@ module.exports = {
     firstname: {
       type: Sequelize.STRING,
       allowNull: false
+    },
+    googleId: {
+      type: Sequelize.STRING,
+    },
+    facebookId: {
+      type: Sequelize.STRING,
     },
     username: {
       allowNull: false,
@@ -26,11 +31,14 @@ module.exports = {
     },
     password: {
       type: Sequelize.STRING(1000),
-      allowNull: false,
+      allowNull: true,
       select: false
     },
     role: {
       type: Sequelize.STRING,
+    },
+    authType: {
+      type: Sequelize.STRING
     },
     lineManager: {
       allowNull: true,
