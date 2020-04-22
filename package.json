@@ -15,7 +15,7 @@
     "local:coveralls": "nyc npm run test && nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "migrate": "npx sequelize-cli db:migrate",
-    "seed":" npx sequelize-cli db:seed:all",
+    "seed": "npx sequelize-cli db:seed:all",
     "seed:drop": "npx sequelize-cli db:seed:undo:all",
     "migrate:test": "env NODE_ENV=test sequelize db:migrate && env NODE_ENV=test sequelize db:seed:all",
     "drop": "sequelize db:migrate:undo:all",

@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import passport from 'passport';
 
 import AuthHelper from '../helpers/authHelpers';
+import TokenHelper from '../helpers/tokenHelper';
+import UserHelper from '../helpers/UserHelper';
 
 /**
  * This class contains all methods
@@ -30,9 +32,9 @@ class AuthController {
       password: hashedPassword,
       isVerified: false
     };
-    const user = await AuthHelper.createUser(data);
+    const user = await UserHelper.createUser(data);
     if (user) {
-      const token = await AuthHelper.createToken({
+      const token = await TokenHelper.createToken({
         id: user.id,
         email,
         username
@@ -55,9 +57,9 @@ class AuthController {
    */
   static async verifyEmail(req, res) {
     const { token } = req.params;
-    const { id, email, username } = await AuthHelper.verifyToken(token);
+    const { id, email, username } = await TokenHelper.verifyToken(token);
     if (id) {
-      AuthHelper.verifyUser(id);
+      AuthHelper.verifyUserEmail(id);
       res.status(200).send({
         userid: id,
         email,
@@ -101,7 +103,7 @@ class AuthController {
           lineManager,
           isVerified
         };
-        const token = await AuthHelper.createToken(payload);
+        const token = await TokenHelper.createToken(payload);
         /** assigns payload to req.user */
         req.login(payload, { session: false }, () => res.status(200).json({
           status: 200,

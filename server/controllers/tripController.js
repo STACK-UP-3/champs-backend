@@ -1,5 +1,5 @@
-import tripHelpers from '../helpers/tripHelper';
-import pagination from '../helpers/paginationHelper';
+import TripHelpers from '../helpers/tripHelper';
+import PaginatingData from '../helpers/paginationHelper';
 
 /**
  * This class contains all methods
@@ -53,7 +53,7 @@ class TripController {
         const cityNumber = destination.length;
 
         newTrip = await TripController.setTripType(newTrip, returnDate, cityNumber);
-        const foundTrip = await tripHelpers.findByReasonOrDate({
+        const foundTrip = await TripHelpers.findByReasonOrDate({
           userId: myuserId,
           reasons: body.reasons,
           destination: body.destination,
@@ -65,7 +65,7 @@ class TripController {
             data: 'You already created this trip'
           });
         }
-        const saveTrip = await tripHelpers.saveTrip(newTrip);
+        const saveTrip = await TripHelpers.saveTrip(newTrip);
         saveTrip.departure = req.departure[0];
         saveTrip.destination = req.destination;
 
@@ -100,8 +100,8 @@ class TripController {
       const { role, id } = req.user;
       const {
         start, end, pages, skip, paginate
-      } = await pagination.paginateData(req.query);
-      const foundTrips = await tripHelpers.findTripByRole(role, id, skip, start);
+      } = await PaginatingData.paginateData(req.query);
+      const foundTrips = await TripHelpers.findTripByRole(role, id, skip, start);
       const paginatedData = foundTrips.rows;
       const dataCount = foundTrips.count;
       if (paginatedData.length === 0) {
@@ -133,7 +133,7 @@ class TripController {
     try {
       const { tripId } = req.params;
       const { role, id } = req.user;
-      const foundTrip = await tripHelpers.findTripById(tripId, { role, id });
+      const foundTrip = await TripHelpers.findTripById(tripId, { role, id });
       if (foundTrip) {
         return res.status(200).json({
           status: 200,

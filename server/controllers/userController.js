@@ -1,6 +1,6 @@
 import UserHelpers from '../helpers/UserHelper';
-import pagination from '../helpers/paginationHelper';
-import authHelper from '../helpers/authHelpers';
+import PaginatingData from '../helpers/paginationHelper';
+import TokenHelper from '../helpers/tokenHelper';
 
 /**
  * This class contains.
@@ -37,7 +37,7 @@ class UserController {
   }
 
   /**
-   * This method handle the users pagination.
+   * This method handle the users PaginatingData.
    * @param {object} req The user's request.
    * @param {object} res The response.
    * @param {function} next The next action.
@@ -47,7 +47,7 @@ class UserController {
     try {
       const {
         start, end, pages, skip, paginate
-      } = await pagination.paginateData(req.query);
+      } = await PaginatingData.paginateData(req.query);
       const allUsers = await UserHelpers.getAllUsers(skip, start);
       const paginatedData = allUsers.rows;
       const dataCount = allUsers.count;
@@ -107,7 +107,7 @@ class UserController {
    */
   static async updateProfile(req, res) {
     const { token } = req.headers;
-    const { id } = authHelper.verifyToken(token);
+    const { id } = TokenHelper.verifyToken(token);
     const {
       lastname,
       firstname,

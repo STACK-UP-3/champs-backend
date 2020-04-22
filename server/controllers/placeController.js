@@ -1,5 +1,5 @@
 import PlaceHelpers from '../helpers/placeHelper';
-import pagination from '../helpers/paginationHelper';
+import PaginatingData from '../helpers/paginationHelper'; // to be renamed a noun name
 
 /**
  * This class contains all methods
@@ -55,7 +55,7 @@ class PlaceController {
     try {
       const {
         start, end, pages, skip, paginate
-      } = await pagination.paginateData(req.query);
+      } = await PaginatingData.paginateData(req.query);
       const { rows, count } = await PlaceHelpers.allPlace(skip, start);
 
       const paginatedData = rows;

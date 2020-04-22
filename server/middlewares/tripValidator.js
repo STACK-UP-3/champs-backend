@@ -1,5 +1,5 @@
-import tripHelpers from '../helpers/tripHelper';
-import placeHelpers from '../helpers/placeHelper';
+import TripHelpers from '../helpers/tripHelper';
+import PlaceHelpers from '../helpers/placeHelper';
 
 import { dateValidator, returnDate } from '../helpers/dateValidator';
 import tripSchemas from '../schemas/tripSchema';
@@ -11,7 +11,7 @@ import idSchemas from '../schemas/idValidator';
  * required to validate
  * sent data from the UI.
  */
-class validatetrip {
+class ValidateTrip {
   /**
    * This method validates the data sent from the UI.
    * @param {object} req The user's request.
@@ -78,13 +78,13 @@ class validatetrip {
     } = req;
 
     const userId = user.id;
-    const tripExists = await tripHelpers.findByReasonOrDate({
+    const tripExists = await TripHelpers.findByReasonOrDate({
       ...body,
       userId
     });
     const errors = {};
-    const placeExistsFrom = await placeHelpers.placeExist('id', body.departure);
-    const placeExistsTo = await placeHelpers.placeExist('id', body.destination);
+    const placeExistsFrom = await PlaceHelpers.placeExist('id', body.departure);
+    const placeExistsTo = await PlaceHelpers.placeExist('id', body.destination);
     const isValideDate = dateValidator(body.date);
     const isRtnDate = returnDate({ dateR: body.returnDate, dateS: body.date });
 
@@ -118,4 +118,4 @@ class validatetrip {
   }
 }
 
-export default validatetrip;
+export default ValidateTrip;

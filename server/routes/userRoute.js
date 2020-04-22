@@ -1,16 +1,18 @@
 import Router from 'express';
-import isSuperAdmin from '../middlewares/isSuperAdmin';
-import userController from '../controllers/UserController';
-import validateRole from '../middlewares/roleValidator';
-import validateToken from '../middlewares/tokenValidator';
+import UserController from '../controllers/userController';
 import paginationValidator from '../middlewares/paginationValidator';
-import paginate from '../middlewares/paginationMiddleware';
-import validateUser from '../middlewares/userValidator';
+import PaginateData from '../middlewares/paginationMiddleware';
+import UserValidator from '../middlewares/userValidator'; // Revise naming
+import tokenValidator from '../middlewares/tokenValidator';
+import CheckUser from '../middlewares/checkUser';
 
 const router = Router();
 
-router.get('/users/', validateToken, paginationValidator, userController.retrieveUsers, paginate.paginatedRetrievedData);
-router.patch('/users/:userId/role', validateToken, isSuperAdmin, validateRole, userController.updateRole);
-router.get('/users/:userId', validateToken, validateUser.isValidatorId, userController.retrieveUser);
+router.patch('/user/:username/profile', tokenValidator, CheckUser.profileOwner, UserValidator.validateUserData, CheckUser.isUserNameUsed, UserController.updateProfile);
+router.get('/user/:username/profile', tokenValidator, CheckUser.profileOwner, UserController.retrieveProfile);
+
+router.get('/users/', tokenValidator, paginationValidator, UserController.retrieveUsers, PaginateData.paginatedRetrievedData);
+router.patch('/users/:userId/role', tokenValidator, CheckUser.checkRole, UserValidator.validate, UserController.updateRole);
+router.get('/users/:userId', tokenValidator, UserValidator.isValidatorId, UserController.retrieveUser);
 
 export default router;

@@ -1,5 +1,7 @@
 import { config } from 'dotenv';
-import authHelper from '../helpers/authHelpers';
+import AuthHelper from '../helpers/authHelpers';
+import TokenHelper from '../helpers/tokenHelper';
+import UserHelper from '../helpers/UserHelper';
 
 config();
 
@@ -17,16 +19,16 @@ class ResetController {
      */
   static async sendResetPasswordLink(req, res) {
     const { email } = req.body;
-    const registeredUser = await authHelper.findUser(email);
+    const registeredUser = await UserHelper.findUser(email);
     const task = 'password-reset';
 
     if (registeredUser) {
-      const token = await authHelper.createToken({
+      const token = await TokenHelper.createToken({
         id: registeredUser.id,
         email
       });
 
-      await authHelper.sendMail(email, token, task);
+      await AuthHelper.sendMail(email, token, task);
       res.status(200).send({
         status: 200,
         message: 'Password reset link has been sent to your email. Check it out!'
@@ -56,7 +58,7 @@ class ResetController {
       });
     }
 
-    const result = authHelper.updateUserPassword({ email, password });
+    const result = AuthHelper.updateUserPassword({ email, password });
 
     if (result) {
       return res.status(200).json({

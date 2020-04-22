@@ -3,7 +3,7 @@
  * required to handle
  * paginations.
  */
-class PaginatingData {
+class PaginatingData { // to be named a noun name
   /**
  * This method handle the pagination of retrieved data.
  * @param {object} pages The page number.

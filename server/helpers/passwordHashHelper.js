@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
  * two methods, one to help hashing password
  * and the second to retrieve hashed password
  */
-class Hasher {
+class PasswordHasher {
   /**
      * This following method hashes a password.
      * @param {string} password The user's password.
@@ -26,4 +26,4 @@ class Hasher {
   }
 }
 
-export default Hasher;
+export default PasswordHasher;

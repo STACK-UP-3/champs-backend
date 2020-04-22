@@ -10,6 +10,36 @@ const {
  */
 class UserHelper {
   /**
+   * This method creates the user in the database.
+   * @param {object} data The data to create a user.
+   * @returns {object}  some data of the created user from database.
+   */
+  static async createUser(data) {
+    const result = await User.create(data, {
+      fields: [
+        'lastname', 'firstname', 'email', 'username', 'password', 'role', 'isVerified'
+      ]
+    });
+    return result;
+  }
+
+
+  /**
+   * This method searches a user with specific email in the Database.
+   * @param {String} data the data of the user to be verified.
+   * @returns {Boolean}  if the user exists or not.
+   */
+  static async findUser(data) {
+    try {
+      const user = await User.findOne({ where: data });
+      return user;
+    } catch (error) {
+      return error;
+    }
+  }
+
+
+  /**
    * find a user with a condition.
    * @param {string} attr .
    * @param {string} val .

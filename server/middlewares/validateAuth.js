@@ -8,7 +8,7 @@ import {
  * required to validate
  * sent data from the UI.
  */
-class validateAuth {
+class ValidateAuth {
   /**
    * This method validates the data sent from the UI.
    * @param {object} req The user's request.
@@ -114,4 +114,4 @@ class validateAuth {
     });
   }
 }
-export default validateAuth;
+export default ValidateAuth;

@@ -6,7 +6,7 @@ import idSchemas from '../schemas/idValidator';
  * required to validate
  * sent data from the UI.
  */
-class validatePlace {
+class ValidatePlace {
   /**
      * This method handle the place validator request.
      * @param {object} req The user's request.
@@ -55,4 +55,4 @@ class validatePlace {
     }
   }
 }
-export default validatePlace;
+export default ValidatePlace;
