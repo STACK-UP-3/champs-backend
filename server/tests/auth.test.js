@@ -58,7 +58,7 @@ describe('POST data to SIGNUP', () => {
       .post('/api/v1/auth/signup')
       .send(user[2])
       .end((err, res) => {
-        chai.expect(res).to.have.status(400);
+        chai.expect(res).to.have.status(409);
         expect(res.body).to.have.property('message');
         done();
       });

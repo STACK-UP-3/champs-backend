@@ -1,67 +1,77 @@
 import models from '../sequelize/models';
 
-const {
-  Place
-} = models;
-
 /**
  * This class contains
- * all methods required to save/edit/retrieve/delete
- * the Place data
+ * methods for handling
+ * place operations
  */
-class PlaceHelpers {
+class PlaceHelper {
   /**
- * find a user with a condition.
- * @param {string} attr .
- * @param {string} val .
+ * This method checks whether the place exists
+ * @param {string} column a value column where value belongs.
+ * @param {string} value actual value.
  * @returns {object} User data.
  */
-  static async placeExist(attr, val) {
-    const PlaceExist = await Place.findAll({
-      where: {
-        [attr]: val
-      }
-    });
-    return PlaceExist;
+  static async placeExist(column, value) {
+    try {
+      const { Place } = models;
+      const PlaceExist = await Place.findAll({
+        where: {
+          [column]: value
+        }
+      });
+      return PlaceExist;
+    } catch (error) {
+      return error;
+    }
   }
 
   /**
-     * Finds a all Place.
+     * This method retrieves all places.
      * @param {interger} skip a skip.
      * @param {interger} start a start.
      * @returns {object} Place data.
      */
-  static async allPlace(skip, start) {
-    const Places = await Place.findAndCountAll({
-      limit: skip,
-      offset: start,
-      order: [['name', 'ASC']],
-    });
-    return Places;
+  static async retrievePlaces(skip, start) {
+    try {
+      const { Place } = models;
+      const Places = await Place.findAndCountAll({
+        limit: skip,
+        offset: start,
+        order: [['name', 'ASC']],
+      });
+      return Places;
+    } catch (error) {
+      return error;
+    }
   }
 
   /**
-     * Saves a Place in the DB.
+     * This method saves a place in the database.
      * @param {object} place The request sent by a user.
      * @returns {object} Place data.
      */
   static async savePlace(place) {
-    const acceptedPlace = await Place.create({
-      ...place,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }, {
-      fields: [
-        'name',
-        'country',
-        'city',
-        'createAt',
-        'updatedAt'
-      ]
-    });
-
-    return acceptedPlace;
+    try {
+      const { Place } = models;
+      const acceptedPlace = await Place.create({
+        ...place,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }, {
+        fields: [
+          'name',
+          'country',
+          'city',
+          'createAt',
+          'updatedAt'
+        ]
+      });
+      return acceptedPlace;
+    } catch (error) {
+      return error;
+    }
   }
 }
 
-export default PlaceHelpers;
+export default PlaceHelper;

@@ -1,13 +1,12 @@
 /**
- * This class contains all methods
- * required to handle
- * paginations.
+ * This class contains methods
+ * for handling pagination
  */
-class PaginatingData {
+class DataPagination {
   /**
- * This method handle the pagination of retrieved data.
- * @param {object} pages The page number.
- * @param {object} limits The limits of data.
+ * This method pagenates data.
+ * @param {object} page The page number.
+ * @param {object} limit The limit of data.
  * @returns {object} The limit and skip.
  */
   static paginateData({ page, limit }) {
@@ -21,4 +20,5 @@ class PaginatingData {
     };
   }
 }
-export default PaginatingData;
+
+export default DataPagination;

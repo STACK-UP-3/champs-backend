@@ -8,225 +8,240 @@ const {
 
 /**
  * This class contains
- * all methods required to save/edit/retrieve
- * the trip data
+ * methods for handling trip operations.
  */
-class TripHelpers {
+class TripHelper {
   /**
-     * Finds a trip by reasons and date.
-     * @param {string} trip a trip data.
+     * This method finds a trip by reason or date.
+     * @param {string} trip trip data.
      * @returns {object} trip data.
      */
   static async findByReasonOrDate(trip) {
-    const {
-      userId,
-      reasons,
-      destination,
-      date
-    } = trip;
-    const newDate = new Date(date);
-    const tripExist = await Trip.findOne({
-      where: {
+    try {
+      const {
         userId,
         reasons,
         destination,
-        date: newDate
-      }
-    });
-    return tripExist;
+        date
+      } = trip;
+      const newDate = new Date(date);
+      const tripExist = await Trip.findOne({
+        where: {
+          userId,
+          reasons,
+          destination,
+          date: newDate
+        }
+      });
+      return tripExist;
+    } catch (error) {
+      return error;
+    }
   }
 
   /**
-     * Saves a trip in the DB.
-     * @param {object} trip The request sent by a user.
+     * This method saves a trip in database.
+     * @param {object} trip trip data.
      * @returns {object} trip data.
      */
   static async saveTrip(trip) {
-    const acceptedTrip = await Trip.create({
-      ...trip,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }, {
-      fields: [
-        'userId',
-        'tripType',
-        'departure',
-        'destination',
-        'date',
-        'reasons',
-        'returnDate',
-        'status',
-        'createAt',
-        'updatedAt'
-      ]
-    });
+    try {
+      const acceptedTrip = await Trip.create({
+        ...trip,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }, {
+        fields: [
+          'userId',
+          'tripType',
+          'departure',
+          'destination',
+          'date',
+          'reasons',
+          'returnDate',
+          'status',
+          'createAt',
+          'updatedAt'
+        ]
+      });
 
-    return acceptedTrip;
+      return acceptedTrip;
+    } catch (error) {
+      return error;
+    }
   }
 
   /**
-   * Finds a trip by user role.
-   * @param {string} role From user details inside token.
-   * @param {integer} id user's Id.
+   * This method finds a trip by role.
+   * @param {string} role user role.
+   * @param {integer} id user Id.
    * @param {integer} skip limit.
    * @param {integer} start from.
-   * @returns {object} Trip request data.
+   * @returns {object} trip data.
    */
   static async findTripByRole(role, id, skip, start) {
-    let foundTrip = { rows: [], count: 0 };
-    if (role === 'Manager') {
-      const assignedUsers = await User.findAndCountAll({
-        where: { lineManager: id },
-        attributes: ['id', 'firstname', 'email', 'lastname', 'role', 'lineManager']
-      });
-      if (assignedUsers.count > 0) {
-        const users = assignedUsers.rows.map((user) => user.id);
+    try {
+      let foundTrip = { rows: [], count: 0 };
+      if (role === 'Manager') {
+        const assignedUsers = await User.findAndCountAll({
+          where: { lineManager: id },
+          attributes: ['id', 'firstname', 'email', 'lastname', 'role', 'lineManager']
+        });
+        if (assignedUsers.count > 0) {
+          const users = assignedUsers.rows.map((user) => user.id);
 
+          foundTrip = await Trip.findAndCountAll({
+            where: { userId: users },
+            limit: skip,
+            offset: start,
+            order: [['createdAt', 'DESC']],
+            include:
+              [
+                {
+                  model: User,
+                  as: 'User',
+                  attributes: [
+                    'id',
+                    'lineManager',
+                    'firstname',
+                    'lastname',
+                    'email',
+                    'role',
+                  ]
+                },
+                {
+                  model: Place,
+                  as: 'Departure',
+                  attributes: [
+                    'id',
+                    'name',
+                    'country',
+                    'city',
+                  ]
+                },
+                {
+                  model: Place,
+                  as: 'Destination',
+                  attributes: [
+                    'id',
+                    'name',
+                    'country',
+                    'city',
+                  ]
+                }
+              ],
+            attributes: { exclude: ['departure', 'destination'] },
+          });
+        }
+      } else {
         foundTrip = await Trip.findAndCountAll({
-          where: { userId: users },
+          where: { userId: id },
           limit: skip,
           offset: start,
-          order: [['createdAt', 'DESC']],
+          order: [['id', 'DESC']],
           include:
-          [
-            {
-              model: User,
-              as: 'User',
-              attributes: [
-                'id',
-                'lineManager',
-                'firstname',
-                'lastname',
-                'email',
-                'role',
-              ]
-            },
-            {
-              model: Place,
-              as: 'Departure',
-              attributes: [
-                'id',
-                'name',
-                'country',
-                'city',
-              ]
-            },
-            {
-              model: Place,
-              as: 'Destination',
-              attributes: [
-                'id',
-                'name',
-                'country',
-                'city',
-              ]
-            }
-          ],
+            [
+              {
+                model: User,
+                as: 'User',
+                attributes: [
+                  'id',
+                  'lineManager',
+                  'firstname',
+                  'lastname',
+                  'email',
+                  'role',
+                ]
+              },
+              {
+                model: Place,
+                as: 'Departure',
+                attributes: [
+                  'id',
+                  'name',
+                  'country',
+                  'city',
+                ]
+              },
+              {
+                model: Place,
+                as: 'Destination',
+                attributes: [
+                  'id',
+                  'name',
+                  'country',
+                  'city',
+                ]
+              }
+            ],
           attributes: { exclude: ['departure', 'destination'] },
         });
       }
-    } else {
-      foundTrip = await Trip.findAndCountAll({
-        where: { userId: id },
-        limit: skip,
-        offset: start,
-        order: [['id', 'DESC']],
-        include:
-          [
-            {
-              model: User,
-              as: 'User',
-              attributes: [
-                'id',
-                'lineManager',
-                'firstname',
-                'lastname',
-                'email',
-                'role',
-              ]
-            },
-            {
-              model: Place,
-              as: 'Departure',
-              attributes: [
-                'id',
-                'name',
-                'country',
-                'city',
-              ]
-            },
-            {
-              model: Place,
-              as: 'Destination',
-              attributes: [
-                'id',
-                'name',
-                'country',
-                'city',
-              ]
-            }
-          ],
-        attributes: { exclude: ['departure', 'destination'] },
-      });
+      return foundTrip;
+    } catch (error) {
+      return error;
     }
-    return foundTrip;
   }
 
   /**
-   * Finds if a user has trip.
+   * This method finds a trip by id.
    * @param {string} tripId trip id.
-   * @param {string} id userId.
+   * @param {string} id user id.
    * @param {string} role user role.
-   * @returns {object} The trip's data.
+   * @returns {object} trip data.
    */
   static async findTripById(tripId, { id, role }) {
-    const trip = await Trip.findOne({
-      where: { id: tripId },
-      include: [
-        {
-          model: User,
-          as: 'User',
-          attributes: [
-            'id',
-            'lineManager',
-            'firstname',
-            'lastname',
-            'email',
-            'role',
-          ]
-        },
-        {
-          model: Place,
-          as: 'Departure',
-          attributes: [
-            'id',
-            'name',
-            'country',
-            'city',
-          ]
-        },
-        {
-          model: Place,
-          as: 'Destination',
-          attributes: [
-            'id',
-            'name',
-            'country',
-            'city',
-          ]
-        }
-      ],
-      attributes: { exclude: ['departure', 'destination'] },
-    });
+    try {
+      const trip = await Trip.findOne({
+        where: { id: tripId },
+        include: [
+          {
+            model: User,
+            as: 'User',
+            attributes: [
+              'id',
+              'lineManager',
+              'firstname',
+              'lastname',
+              'email',
+              'role',
+            ]
+          },
+          {
+            model: Place,
+            as: 'Departure',
+            attributes: [
+              'id',
+              'name',
+              'country',
+              'city',
+            ]
+          },
+          {
+            model: Place,
+            as: 'Destination',
+            attributes: [
+              'id',
+              'name',
+              'country',
+              'city',
+            ]
+          }
+        ],
+        attributes: { exclude: ['departure', 'destination'] },
+      });
 
-    if (!trip) return false;
+      if (!trip) return false;
 
-    const { lineManager } = trip.User;
-    const { userId } = trip;
-    if (userId === id || (role === 'Manager' && lineManager === id) || role === 'Super Administrator') return trip;
+      const { lineManager } = trip.User;
+      const { userId } = trip;
+      if (userId === id || (role === 'Manager' && lineManager === id) || role === 'Super Administrator') return trip;
 
-    return false;
+      return false;
+    } catch (error) {
+      return error;
+    }
   }
 }
 
-export default TripHelpers;
+export default TripHelper;
