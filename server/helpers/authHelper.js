@@ -1,21 +1,25 @@
-import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import { config } from 'dotenv';
 import sgMail from '@sendgrid/mail';
-import bcrypt from 'bcrypt';
+import UserHelper from './userHelper';
 import { User } from '../sequelize/models/index';
-
+import PasswordHelper from './passwordHelper';
 
 config();
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const {
+  SENDGRID_API_KEY, VERIFY_URL, RESET_URL
+} = process.env;
+
+sgMail.setApiKey(SENDGRID_API_KEY);
 
 /**
- * This class contains all methods
- * required to handle send email confirmation link,
- * generate and verify token, password reset and update.
+ * This class contains methods
+ * that handle authentication related operations
  */
-class authHelper {
+class AuthHelper {
   /**
-     * This method sends an confirmation email and reset password link to user.
+     * This method sends a confirmation email and password reset link to the user.
      * @param {object} email The user's request.
      * @param {object} token The response.
      * @param {object} task The operation to be done.
@@ -25,7 +29,7 @@ class authHelper {
     let message, url;
 
     if (task === 'password-reset') {
-      url = `${process.env.RESET_URL}/${email}/${token}`;
+      url = `${RESET_URL}/${email}/${token}`;
       message = {
         to: email,
         from: 'champsdev2@gmail.com',
@@ -41,7 +45,7 @@ class authHelper {
         `,
       };
     } else {
-      url = `${process.env.VERIFY_URL}/${token}`;
+      url = `${VERIFY_URL}/${token}`;
       message = {
         to: email,
         from: 'champsdev2@gmail.com',
@@ -67,10 +71,7 @@ class authHelper {
       sgMail.send(message);
       return { isSent: true };
     } catch (error) {
-      return {
-        isSent: false,
-        error
-      };
+      return error;
     }
   }
 
@@ -91,74 +92,41 @@ class authHelper {
   }
 
   /**
-   * This method creates the user in the database.
-   * @param {object} data The data to create a user.
-   * @returns {object}  some data of the created user from database.
+   * This method verifies user email.
+   * @param {Number} id id of the user whose email is to be verified.
+   * @returns {Boolean}  True when user email is verified, False if is not.
    */
-  static async createUser(data) {
-    const result = await User.create(data, {
-      fields: [
-        'lastname', 'firstname', 'email', 'username', 'password', 'role', 'isVerified'
-      ]
-    });
-    return result;
-  }
-
-
-  /**
-   * This method creates token used to confirm email.
-   * @param {object} data the object that contain the data that is embedded with token.
-   * @returns {String}  token created .
-   */
-  static async createToken(data) {
+  static async verifyUserEmail(id) {
     try {
-      const token = await jwt.sign(
-        data, process.env.SECRET_KEY,
-        { expiresIn: '2h' }
-      );
-      return token;
-    } catch (error) {
-      return error;
-    }
-  }
-
-  /**
-   * This method verifies and decodes the token sent.
-   * @param {String} token the string that contain a token.
-   * @returns {object}  some data of the created user from database.
-   */
-  static verifyToken(token) {
-    try {
-      const data = jwt.verify(token, process.env.SECRET_KEY);
-      return data;
+      const verify = await User.update({ isVerified: true }, { where: { id } });
+      return verify !== undefined;
     } catch (err) {
       return err;
     }
   }
 
   /**
-   * This method updates the users to be verified in the database.
-   * @param {Number} id the id of the user to be verified.
-   * @returns {Boolean}  if the data were created or not.
-   */
-  static async verifyUser(id) {
-    const verify = await User.update({ isVerified: true }, { where: { id } });
-    return verify !== undefined;
-  }
-
-  /**
-   * This method searches a user with specific email in the Database.
-   * @param {String} data the data of the user to be verified.
-   * @returns {Boolean}  if the user exists or not.
-   */
-  static async findUser(data) {
+     * This method signs a user in.
+     * @param {string} email The user's email to be checked.
+     * @param {string} password The user's password to be compared.
+     * @param {Function} done supplies user credentials after user is successfully checked.
+     * @returns {Function} returns a message for incorrect user email or Password.
+     */
+  static async signInLocal(email, password, done) {
     try {
-      const user = await User.findOne({ where: data });
-      return user;
+      const user = await UserHelper.findUser({ email });
+      if (user) {
+        if (user.isVerified === false) return done('Please confirm your email before logging in!');
+
+        const passwordExist = await PasswordHelper
+          .comparePasswords(password, user.password);
+        if (passwordExist) return done(null, user);
+      }
+      return done('Password or email is incorrect');
     } catch (error) {
       return error;
     }
   }
 }
 
-export default authHelper;
+export default AuthHelper;

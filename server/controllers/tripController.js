@@ -1,31 +1,34 @@
-import tripHelpers from '../helpers/tripHelper';
-import pagination from '../helpers/paginationHelper';
+import TripHelper from '../helpers/tripHelper';
+import DataPagination from '../helpers/paginationHelper';
 
 /**
  * This class contains all methods
  * required to handle
- * trip endpoints' request.
+ * trip endpoints' requests.
  */
 class TripController {
   /**
-   * This method figures out the trip type.
+   * This method sets a trip type.
    * @param {object} trip The user's request.
    * @param {string} returnDate The response.
-   * @param {integer} cityNumber The response.
    * @returns {object} The status and some data of the trip.
    */
   static async setTripType(trip, returnDate) {
-    if (returnDate) {
-      trip.returnDate = returnDate;
-      trip.tripType = 'Return';
-    } else {
-      trip.tripType = 'One-way';
+    try {
+      if (returnDate) {
+        trip.returnDate = returnDate;
+        trip.tripType = 'Return';
+      } else {
+        trip.tripType = 'One-way';
+      }
+      return trip;
+    } catch (error) {
+      return error;
     }
-    return trip;
   }
 
   /**
-   * This method handle createTrip request.
+   * This method handles a request for creating a trip.
    * @param {object} req The user's request.
    * @param {object} res The response.
    * @returns {object} The status and some data of the trip.
@@ -53,7 +56,7 @@ class TripController {
         const cityNumber = destination.length;
 
         newTrip = await TripController.setTripType(newTrip, returnDate, cityNumber);
-        const foundTrip = await tripHelpers.findByReasonOrDate({
+        const foundTrip = await TripHelper.findByReasonOrDate({
           userId: myuserId,
           reasons: body.reasons,
           destination: body.destination,
@@ -65,14 +68,14 @@ class TripController {
             data: 'You already created this trip'
           });
         }
-        const saveTrip = await tripHelpers.saveTrip(newTrip);
-        saveTrip.departure = req.departure[0];
-        saveTrip.destination = req.destination;
+        const savedTrip = await TripHelper.saveTrip(newTrip);
+        savedTrip.departure = req.departure[0];
+        savedTrip.destination = req.destination;
 
         return res.status(201).json({
           status: 201,
           message: 'Trip has been successfully created.',
-          data: saveTrip
+          data: savedTrip
         });
       }
       return res.status(401).json({
@@ -82,7 +85,7 @@ class TripController {
     } catch (error) {
       return res.status(500).json({
         status: 500,
-        message: 'Something went wrong',
+        message: 'Something went wrong when creating the trip',
         error: error.message
       });
     }
@@ -100,8 +103,8 @@ class TripController {
       const { role, id } = req.user;
       const {
         start, end, pages, skip, paginate
-      } = await pagination.paginateData(req.query);
-      const foundTrips = await tripHelpers.findTripByRole(role, id, skip, start);
+      } = await DataPagination.paginateData(req.query);
+      const foundTrips = await TripHelper.findTripByRole(role, id, skip, start);
       const paginatedData = foundTrips.rows;
       const dataCount = foundTrips.count;
       if (paginatedData.length === 0) {
@@ -117,14 +120,14 @@ class TripController {
     } catch (error) {
       return res.status(500).json({
         status: 500,
-        message: 'Something went wrong',
+        message: 'Something went wrong when retrieving all trips',
         error: error.message
       });
     }
   }
 
   /**
-   * This method handles retrieving single trip requests.
+   * This method handles retrieving single trip request.
    * @param {object} req The user's request.
    * @param {object} res The response.
    * @returns {object} The status and some data of the trip.
@@ -133,7 +136,7 @@ class TripController {
     try {
       const { tripId } = req.params;
       const { role, id } = req.user;
-      const foundTrip = await tripHelpers.findTripById(tripId, { role, id });
+      const foundTrip = await TripHelper.findTripById(tripId, { role, id });
       if (foundTrip) {
         return res.status(200).json({
           status: 200,
@@ -148,7 +151,7 @@ class TripController {
     } catch (error) {
       return res.status(500).json({
         status: 500,
-        message: 'Something went wrong',
+        message: 'Something went wrong when retrieving the trip',
         error: error.message
       });
     }

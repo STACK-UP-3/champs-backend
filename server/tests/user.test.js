@@ -123,7 +123,7 @@ describe('patch data to UPDATE', () => {
       .set('token', userToken)
       .send(user[3])
       .end((err, res) => {
-        expect(res).to.have.status(400);
+        expect(res).to.have.status(409);
         expect(res.body).to.be.a('object');
         expect(res.body).to.have.property('message');
         done(err);

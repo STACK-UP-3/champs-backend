@@ -1,16 +1,15 @@
 /**
- * This class contains all methods
- * required to handle
- * paginations.
+ * This class contains methods
+ * for handling pagination
  */
-class PaginateData {
+class DataPagination {
   /**
-     * This method handle the pagination of retrieved data.
+     * This method handles the pagination of retrieved data.
      * @param {object} req The user request.
      * @param {object} res The response.
      * @returns {object} The paginated data.
      */
-  static paginatedRetrievedData(req, res) {
+  static paginateRetrievedData(req, res) {
     req.data.paginate.results = req.data.paginatedData;
     const {
       start, end, dataCount, pages, skip
@@ -35,4 +34,4 @@ class PaginateData {
     });
   }
 }
-export default PaginateData;
+export default DataPagination;

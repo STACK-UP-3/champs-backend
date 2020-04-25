@@ -1,5 +1,5 @@
-import winston from 'winston';
 import os from 'os';
+import winston from 'winston';
 import LogdnaWinston from 'logdna-winston';
 
 const {
@@ -9,6 +9,7 @@ const {
 const ifaces = os.networkInterfaces();
 let ipname, macname;
 
+// Looping through network interfaces to get Mac and Ip address.
 Object.keys(ifaces).forEach((ifname) => {
   let alias = 0;
   ifaces[ifname].forEach((iface) => {
@@ -25,6 +26,8 @@ Object.keys(ifaces).forEach((ifname) => {
     alias += 1;
   });
 });
+
+// Setting up options required by Winston.
 const options = {
   fileHttp: {
     level: 'http',
@@ -67,7 +70,7 @@ const options = {
   }
 };
 
-
+// Initialising a Winston object.
 const logger = winston.createLogger({
   colorize: false,
   handleExceptions: true,
@@ -84,6 +87,8 @@ const logger = winston.createLogger({
   ],
   exitOnError: false
 });
+
+// Ignore logging in Production.
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console(options.console));
 }

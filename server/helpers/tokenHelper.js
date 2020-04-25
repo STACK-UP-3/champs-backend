@@ -3,26 +3,41 @@ import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
+const { SECRET_KEY } = process.env;
+
 /**
- * This class contains.
- * two methods, one to help decode token.
- * and the second to gerate token.
+ * This class contains
+ * methods for handling token-related operations.
  */
 class TokenHelper {
   /**
-   * This method creates token used to confirm email.
-   * @param {object} data the object that contain the data that is embedded with token.
-   * @returns {String}  token created .
+   * This method generates a token.
+   * @param {object} data information to be stored in the token.
+   * @returns {String} generated token.
    */
-  static async createToken(data) {
+  static async generateToken(data) {
     try {
-      const token = jwt.sign(
-        data, process.env.SECRET_KEY,
+      const token = await jwt.sign(
+        data, SECRET_KEY,
         { expiresIn: '2h' }
       );
       return token;
     } catch (error) {
       return error;
+    }
+  }
+
+  /**
+   * This method verifies and decodes a sent token.
+   * @param {String} token a sent token.
+   * @returns {object} some data of the created user from database.
+   */
+  static verifyToken(token) {
+    try {
+      const data = jwt.verify(token, SECRET_KEY);
+      return data;
+    } catch (err) {
+      return err;
     }
   }
 }

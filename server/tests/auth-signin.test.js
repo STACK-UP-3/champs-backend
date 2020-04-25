@@ -2,17 +2,16 @@ import 'dotenv';
 import chai, { expect } from 'chai';
 import { describe, it } from 'mocha';
 import chaiHttp from 'chai-http';
-
 import app from '../index';
-import { users } from '../config/fixtures.json';
+import { users } from './mochData/fixtures.json';
 
 chai.should();
 chai.use(chaiHttp);
 
-
-describe('Test sign in', () => {
-  it('User can sign in', (done) => {
-    chai.request(app)
+describe('SignIn Test Suite', () => {
+  it('should allow user to sign in', (done) => {
+    chai
+      .request(app)
       .post('/api/v1/auth/signin')
       .send(users[0])
       .end((err, res) => {
@@ -20,8 +19,9 @@ describe('Test sign in', () => {
         done();
       });
   });
-  it('password is invalid', (done) => {
-    chai.request(app)
+  it('should not allow user to sign in when password is incorrect', (done) => {
+    chai
+      .request(app)
       .post('/api/v1/auth/signin')
       .send(users[1])
       .end((err, res) => {
@@ -32,8 +32,9 @@ describe('Test sign in', () => {
         done();
       });
   });
-  it('email not found', (done) => {
-    chai.request(app)
+  it('should not allow user to sign in when they are not registered', (done) => {
+    chai
+      .request(app)
       .post('/api/v1/auth/signin')
       .send(users[2])
       .end((err, res) => {
@@ -41,8 +42,9 @@ describe('Test sign in', () => {
         done();
       });
   });
-  it('email is empty', (done) => {
-    chai.request(app)
+  it("should not allow user to sign in when they don't provide email", (done) => {
+    chai
+      .request(app)
       .post('/api/v1/auth/signin')
       .send(users[3])
       .end((err, res) => {
@@ -53,8 +55,9 @@ describe('Test sign in', () => {
         done();
       });
   });
-  it('password is empty', (done) => {
-    chai.request(app)
+  it("should not allow user to sign in when they don't provide password", (done) => {
+    chai
+      .request(app)
       .post('/api/v1/auth/signin')
       .send(users[4])
       .end((err, res) => {
@@ -65,9 +68,9 @@ describe('Test sign in', () => {
         done();
       });
   });
-
-  it('password not found', (done) => {
-    chai.request(app)
+  it('should not allow user to sign in when they provide incorrect credentials', (done) => {
+    chai
+      .request(app)
       .post('/api/v1/auth/signin')
       .send(users[5])
       .end((err, res) => {

@@ -1,12 +1,12 @@
-import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
+import chai, { expect } from 'chai';
 import app from '../index';
 
 chai.use(chaiHttp);
 const router = () => chai.request(app);
 
-describe('app test suite', () => {
-  it('users should be redirected to api root when he/she used wrong link', (done) => {
+describe('App Test Suite', () => {
+  it('should redirect user to the home endpoint when they visit invalid endpoint', (done) => {
     router()
       .get('/donotexist')
       .end((error, response) => {
@@ -17,7 +17,8 @@ describe('app test suite', () => {
         done(error);
       });
   });
-  it('users should be go first route', (done) => {
+
+  it('should allow user to visit the home endpoint', (done) => {
     router()
       .get('/')
       .end((error, response) => {

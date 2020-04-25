@@ -1,15 +1,14 @@
 import { Router } from 'express';
-import validatePlace from '../middlewares/placeValidator';
-import validateToken from '../middlewares/tokenValidator';
-import paginate from '../middlewares/paginationMiddleware';
+import User from '../middleware/user';
+import Validations from '../middleware/validations';
+import TokenHandler from '../middleware/tokenHandler';
+import DataPagination from '../middleware/pagination';
 import PlaceController from '../controllers/placeController';
-import isSuperAdmin from '../middlewares/isSuperAdmin';
-import paginationValidator from '../middlewares/paginationValidator';
-
 
 const router = Router();
-router.post('/places/', validateToken, isSuperAdmin, validatePlace.placeValidate, PlaceController.createPlace);
-router.get('/places/:placeId', validateToken, validatePlace.isValidatorId, PlaceController.retrievePlace);
-router.get('/places', validateToken, paginationValidator, PlaceController.retrieveAllPlaces, paginate.paginatedRetrievedData);
+
+router.get('/places/:placeId', TokenHandler.verifyToken, Validations.validatePlaceId, PlaceController.retrievePlace);
+router.post('/places/', TokenHandler.verifyToken, User.verifyRole, Validations.validatePlaceData, PlaceController.createPlace);
+router.get('/places', TokenHandler.verifyToken, Validations.validatePagination, PlaceController.retrieveAllPlaces, DataPagination.paginateRetrievedData);
 
 export default router;

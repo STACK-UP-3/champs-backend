@@ -1,16 +1,14 @@
 import { Router } from 'express';
-import auth from './auth';
-import UserRoutes from './userRoute';
-import user from './user';
-import PlaceRoutes from './placeRoutes';
-import TripRoutes from './tripRoutes';
+import userRoutes from './userRoutes';
+import tripRoutes from './tripRoutes';
+import authRoutes from './authRoutes';
+import placeRoutes from './placeRoutes';
 
 const router = Router();
 
-router.use('/auth', auth);
-router.use(UserRoutes);
-router.use(PlaceRoutes);
-router.use(TripRoutes);
+router.use(userRoutes);
+router.use(tripRoutes);
+router.use(placeRoutes);
+router.use('/auth', authRoutes);
 
-router.use('/user', user);
 export default router;

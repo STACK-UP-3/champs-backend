@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
-
 import logger from '../config/winston';
 
 dotenv.config();
 
-const bnLog = (func) => (req, res) => {
+// Logs the results of a function passed as parameter.
+const statusLogger = (func) => (req, res) => {
   const { method, originalUrl } = req;
   try {
     if (process.env.NODE_ENV !== 'test') {
@@ -17,4 +17,4 @@ const bnLog = (func) => (req, res) => {
   }
 };
 
-export default bnLog;
+export default statusLogger;

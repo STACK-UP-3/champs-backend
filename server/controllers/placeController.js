@@ -1,14 +1,14 @@
-import PlaceHelpers from '../helpers/placeHelper';
-import pagination from '../helpers/paginationHelper';
+import PlaceHelper from '../helpers/placeHelper';
+import DataPagination from '../helpers/paginationHelper';
 
 /**
  * This class contains all methods
  * required to handle
- * trip endpoints' request.
+ * place endpoints' requests.
  */
 class PlaceController {
   /**
-   * This method handle createPlace request.
+   * This method handles a request for creating a place.
    * @param {object} req The user's request.
    * @param {object} res The response.
    * @returns {object} The status and some data of the place.
@@ -21,31 +21,31 @@ class PlaceController {
         country: body.country,
         city: body.city,
       };
-      const foundPlace = await PlaceHelpers.placeExist('name', body.name);
+      const foundPlace = await PlaceHelper.placeExist('name', body.name);
       if (foundPlace.length !== 0) {
         return res.status(409).json({
           status: 409,
-          data: `${body.name} place already exists, use diferent name.`
+          data: `${body.name} place already exists, use a diferent name.`
         });
       }
-      const savePlace = await PlaceHelpers.savePlace(newPlace);
+      const savePlace = await PlaceHelper.savePlace(newPlace);
 
       return res.status(201).json({
         status: 201,
-        message: `${body.name} place was created successfully.`,
+        message: `${body.name} place has been created successfully.`,
         data: savePlace
       });
     } catch (error) {
       return res.status(500).json({
         status: 500,
-        message: 'Something went wrong',
+        message: 'Something went wrong when creating the place',
         error: error.message
       });
     }
   }
 
   /**
-   * This method handles view all place requests.
+   * This method handles the request for retrieving all places.
    * @param {object} req The user's request.
    * @param {object} res The response.
    * @param {function} next The next action.
@@ -55,8 +55,8 @@ class PlaceController {
     try {
       const {
         start, end, pages, skip, paginate
-      } = await pagination.paginateData(req.query);
-      const { rows, count } = await PlaceHelpers.allPlace(skip, start);
+      } = await DataPagination.paginateData(req.query);
+      const { rows, count } = await PlaceHelper.retrievePlaces(skip, start);
 
       const paginatedData = rows;
       const dataCount = count;
@@ -73,14 +73,14 @@ class PlaceController {
     } catch (error) {
       return res.status(500).json({
         status: 500,
-        message: 'Something went wrong',
+        message: 'Something went wrong when retrieving all places',
         error: error.message
       });
     }
   }
 
   /**
-   * This method handles a request for retrieving a place.
+   * This method handles the request for retrieving a single place.
    * @param {object} req The user's request.
    * @param {object} res The response.
    * @returns {object} The status and some data of the trip.
@@ -88,7 +88,7 @@ class PlaceController {
   static async retrievePlace(req, res) {
     try {
       const { placeId } = req.params;
-      const foundPlace = await PlaceHelpers.placeExist('id', placeId);
+      const foundPlace = await PlaceHelper.placeExist('id', placeId);
       if (foundPlace.length > 0) {
         return res.status(200).json({
           status: 200,
@@ -102,7 +102,7 @@ class PlaceController {
     } catch (error) {
       return res.status(500).json({
         status: 500,
-        message: 'Something went wrong',
+        message: 'Something went wrong when retrieving the place',
         error: error.message
       });
     }

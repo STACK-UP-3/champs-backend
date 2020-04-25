@@ -13,4 +13,5 @@ const userSchema = Joi.object().keys({
   emailNotifications: Joi.boolean(),
   inAppNotifications: Joi.boolean()
 });
+
 export default userSchema;
