@@ -63,9 +63,8 @@ before((done) => {
     .post('/api/v1/auth/signin')
     .send(userLogin)
     .end((err, res) => {
-      if (err) done(err);
       userToken = res.body.data.token;
-      done();
+      done(err);
     });
 });
 

@@ -2,15 +2,12 @@ import bcrypt from 'bcrypt';
 import { config } from 'dotenv';
 import sgMail from '@sendgrid/mail';
 import UserHelper from './userHelper';
-import { User } from '../sequelize/models/index';
 import PasswordHelper from './passwordHelper';
+import { User } from '../sequelize/models/index';
 
 config();
 
-const {
-  SENDGRID_API_KEY, VERIFY_URL, RESET_URL
-} = process.env;
-
+const { SENDGRID_API_KEY, VERIFY_URL, RESET_URL } = process.env;
 sgMail.setApiKey(SENDGRID_API_KEY);
 
 /**
@@ -19,12 +16,12 @@ sgMail.setApiKey(SENDGRID_API_KEY);
  */
 class AuthHelper {
   /**
-     * This method sends a confirmation email and password reset link to the user.
-     * @param {object} email The user's request.
-     * @param {object} token The response.
-     * @param {object} task The operation to be done.
-     * @returns {object} The status and some data of the user.
-     */
+   * This method sends a confirmation email and password reset link to the user.
+   * @param {object} email The user's request.
+   * @param {object} token The response.
+   * @param {object} task The operation to be done.
+   * @returns {object} The status and some data of the user.
+   */
   static async sendMail(email, token, task) {
     let message, url;
 
@@ -76,11 +73,11 @@ class AuthHelper {
   }
 
   /**
-     * This method updates the user password.
-     * @param {object} req The user's request.
-     * @param {object} res The response.
-     * @returns {object} The status and some data of the user.
-     */
+   * This method updates the user password.
+   * @param {object} req The user's request.
+   * @param {object} res The response.
+   * @returns {object} The status and some data of the user.
+   */
   static async updateUserPassword({ email, password }) {
     try {
       const passwordHash = await bcrypt.hash(password, 10);
@@ -106,23 +103,83 @@ class AuthHelper {
   }
 
   /**
-     * This method signs a user in.
-     * @param {string} email The user's email to be checked.
-     * @param {string} password The user's password to be compared.
-     * @param {Function} done supplies user credentials after user is successfully checked.
-     * @returns {Function} returns a message for incorrect user email or Password.
-     */
-  static async signInLocal(email, password, done) {
+   * This method signs a user in.
+   * @param {string} email The user's email to be checked.
+   * @param {string} password The user's password to be compared.
+   * @param {Function} done supplies user credentials after user is successfully checked.
+   * @returns {Function} returns a message for incorrect user email or Password.
+   */
+  static async localSignIn(email, password, done) {
     try {
       const user = await UserHelper.findUser({ email });
       if (user) {
         if (user.isVerified === false) return done('Please confirm your email before logging in!');
 
-        const passwordExist = await PasswordHelper
-          .comparePasswords(password, user.password);
-        if (passwordExist) return done(null, user);
+        const passwordExists = await PasswordHelper.comparePasswords(
+          password,
+          user.password
+        );
+        if (passwordExists) return done(null, user);
       }
       return done('Password or email is incorrect');
+    } catch (error) {
+      return error;
+    }
+  }
+
+  /**
+   * This method handles Social Sign In verification.
+   * @param {string} accessToken The user's token offered by social to be checked.
+   * @param {string} refreshToken The user's token offered by social to be checked.
+   * @param {string} profile The user info from google
+   * @param {string} done callback function returns user info after user is successfully checked.
+   * @returns {object} object contains status message or User details after all checks.
+   */
+  static async socialSignIn(accessToken, refreshToken, profile, done) {
+    try {
+      const {
+        id,
+        displayName: username,
+        provider: authType,
+        name: { givenName: firstname, familyName: lastname },
+        _json: { email },
+      } = profile;
+      const userId = authType === 'google' ? 'googleId' : 'facebookId';
+
+      const data = {
+        firstname,
+        lastname,
+        email,
+        username: username || firstname,
+        role: 'Requester',
+        authType,
+        lineManager: null,
+        isVerified: true,
+        [userId]: id,
+      };
+
+      const updatedData = {
+        authType,
+        [userId]: id,
+      };
+
+      const user = await UserHelper.findUser({ email });
+      if (!user) {
+        const userCreated = await UserHelper.registerUser(data);
+
+        if (!userCreated) return done('User was not created');
+        return done(null, userCreated.dataValues);
+      }
+      const userFound = user.dataValues;
+      const { authType: oldAuthType } = userFound;
+
+      if (user && oldAuthType !== authType) {
+        const userUpdated = await UserHelper.updateUserByEmail(email, updatedData);
+        if (userUpdated.dataValues === undefined) return done('User was not updated');
+        return done(null, userUpdated.dataValues);
+      }
+
+      return done(null, user);
     } catch (error) {
       return error;
     }
