@@ -1,3 +1,4 @@
+import passport from 'passport';
 import UserHelper from '../helpers/userHelper';
 import TokenHelper from '../helpers/tokenHelper';
 
@@ -124,5 +125,48 @@ class User {
       });
     }
   }
+
+  /**
+   * This method verifies authentication with google.
+   * @param {object} req The user's request.
+   * @param {object} res The response.
+   * @param {Function} next pass to next function
+   * @returns {object} The status and some data of the user.
+   */
+  static async verifyGoogleSignIn(req, res, next) {
+    try {
+      passport.authenticate('google', { failureRedirect: '/google', session: false }, (err, user) => {
+        if (err) { return next(err); }
+        req.user = user;
+        return next();
+      })(req, res, next);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  /**
+     * This method verifies authentication with facebook.
+     * @param {object} req The user's request.
+     * @param {object} res The response.
+     * @param {Function} next pass to next function
+     * @returns {object} The status and some data of the user.
+     */
+  static async verifyFacebookSignIn(req, res, next) {
+    try {
+      passport.authenticate('facebook', { failureRedirect: '/facebook', session: false }, (err, user) => {
+        if (err) { return next(err); }
+        req.user = user;
+        return next();
+      })(req, res, next);
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        message: 'Something went wrong when authentication with the social platform',
+        error: error.message
+      });
+    }
+  }
 }
+
 export default User;

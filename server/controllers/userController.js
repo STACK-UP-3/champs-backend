@@ -125,7 +125,7 @@ class UserController {
   static async updateProfile(req, res) {
     try {
       const { token } = req.headers;
-      const { id } = TokenHelper.verifyToken(token);
+      const { email } = TokenHelper.verifyToken(token);
 
       const {
         lastname,
@@ -156,12 +156,11 @@ class UserController {
         updatedAt: new Date()
       };
 
-      const update = await UserHelper.updateUser(id, data);
-
+      const updatedProfile = await UserHelper.updateUserByEmail(email, data);
       res.status(200).send({
         status: 200,
         message: 'User profile has been successfuly updated',
-        data: update
+        data: updatedProfile
       });
     } catch (error) {
       return res.status(500).json({

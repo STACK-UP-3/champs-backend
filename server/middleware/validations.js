@@ -290,7 +290,7 @@ class Validation {
       const isValideDate = DateHelper.formatDate(body.date);
       const isRtnDate = DateHelper.verifyStartReturnDate(body.returnDate, body.date);
 
-      if (placeExistsFrom.length === 0) {
+      if (placeExistsFrom.length === [0]) {
         errors.departure = 'choose proper departure location.';
       }
       if (placeExistsTo.length === 0) {

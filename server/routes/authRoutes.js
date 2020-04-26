@@ -1,3 +1,4 @@
+import passport from 'passport';
 import { Router } from 'express';
 import User from '../middleware/user';
 import Validations from '../middleware/validations';
@@ -9,6 +10,10 @@ const router = Router();
 
 router.get('/verify/:token', AuthController.verifyEmail);
 router.post('/signin', Validations.validateSignInData, AuthController.signIn);
+router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+router.get('/google/return', User.verifyGoogleSignIn, AuthController.socialSignIn);
+router.get('/facebook/return', User.verifyFacebookSignIn, AuthController.socialSignIn);
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.post('/reset-link', Validations.validateEmail, PasswordController.sendPasswordResetLink);
 router.post('/signup', Validations.validateSignUpData, User.verifyUsedEmail, User.verifyUsedUsername, AuthController.signUp);
 router.post('/update-password/:email/:token', Validations.validatePasswordResetData, TokenHandler.verifyToken, PasswordController.resetPassword);

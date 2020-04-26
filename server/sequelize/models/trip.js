@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       tripType: DataTypes.STRING,
       departure: DataTypes.INTEGER,
-      destination: DataTypes.INTEGER,
+      destination: DataTypes.ARRAY(DataTypes.INTEGER),
       date: DataTypes.DATE,
       returnDate: DataTypes.DATE,
       reasons: DataTypes.STRING,

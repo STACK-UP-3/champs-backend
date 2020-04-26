@@ -11,15 +11,19 @@ class TripController {
    * This method sets a trip type.
    * @param {object} trip The user's request.
    * @param {string} returnDate The response.
+   * @param {integer} cityNumber The response.
    * @returns {object} The status and some data of the trip.
    */
-  static async setTripType(trip, returnDate) {
+  static async setTripType(trip, returnDate, cityNumber) {
     try {
-      if (returnDate) {
+      if (returnDate && cityNumber === 1) {
         trip.returnDate = returnDate;
         trip.tripType = 'Return';
+      } else if (returnDate && cityNumber > 1) {
+        trip.returnDate = returnDate;
+        trip.tripType = 'Multi-city';
       } else {
-        trip.tripType = 'One-way';
+        trip.tripType = 'one-way';
       }
       return trip;
     } catch (error) {

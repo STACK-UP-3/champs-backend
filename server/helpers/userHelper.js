@@ -15,7 +15,7 @@ class UserHelper {
       const { User } = models;
       const result = await User.create(data, {
         fields: [
-          'lastname', 'firstname', 'email', 'username', 'password', 'role', 'isVerified'
+          'googleId', 'facebookId', 'username', 'firstname', 'lastname', 'email', 'password', 'role', 'authType', 'lineManager', 'isVerified'
         ]
       });
       return result;
@@ -23,7 +23,6 @@ class UserHelper {
       return error;
     }
   }
-
 
   /**
    * This method finds a user.
@@ -41,26 +40,22 @@ class UserHelper {
   }
 
   /**
-   * This method updates a user.
-   * @param {string} column value column.
+   * This method updates a user with email.
+   * @param {string} email user email.
    * @param {object} data user data.
    * @returns {object} user data.
    */
-  static async updateUser(column, data) {
+  static async updateUserByEmail(email, data) {
     try {
       const { User } = models;
       const affectedRows = await User.update(data, {
-        where: {
-          column
-        },
+        where: { email },
         returning: true,
         plain: true
       });
       if (affectedRows) {
         const user = await User.findOne({
-          where: {
-            column
-          },
+          where: { email },
           attributes: {
             exclude: ['password']
           }
@@ -72,12 +67,11 @@ class UserHelper {
     }
   }
 
-
   /**
    * This method retrieves users.
    * @param {string} skip limit
    * @param {string} start from
-   * @returns {object}  user data.
+   * @returns {object} user data.
    */
   static async retrieveUsers(skip, start) {
     try {
