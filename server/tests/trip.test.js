@@ -200,4 +200,60 @@ describe('Trip test suite', () => {
         done(err);
       });
   });
+  it('should accept a trip request', (done) => {
+    router()
+      .patch('/api/v1/trips/2')
+      .set('token', managerToken)
+      .send({
+        status: 'accepted'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal(200);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('data');
+        done(err);
+      });
+  });
+  it('should reject a trip request when an invalid status is submitted', (done) => {
+    router()
+      .patch('/api/v1/trips/1')
+      .set('token', managerToken)
+      .send({
+        status: 'no edit'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal(400);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
+  });
+  it('should reject the trip request when the user has no permission', (done) => {
+    router()
+      .patch('/api/v1/trips/1')
+      .set('token', MangerNoUserToken)
+      .send({
+        status: 'pending'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal(401);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
+  });
+  it('should reject the trip request when the trip doens\'t exist', (done) => {
+    router()
+      .patch('/api/v1/trips/13456789')
+      .set('token', managerToken)
+      .send({
+        status: 'pending'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal(404);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('error');
+        done(err);
+      });
+  });
 });

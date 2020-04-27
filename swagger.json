@@ -6,7 +6,7 @@
     "description": "Barefoot Normads done by Champs in Stackup 3.",
     "contact": {}
   },
-  "host": "champs-bn-api.herokuapp.com",
+  "host": "https://champs-bn-api.herokuapp.com",
   "basePath": "/api/v1",
   "securityDefinitions": {},
   "schemes": [
@@ -654,6 +654,60 @@
             "headers": {}
           }
         }
+      },
+      "patch": {
+        "description": "A line manager can respond to assigned trip requests",
+        "summary": "accept or reject a trip request",
+        "tags": [
+          "Trips"
+        ],
+        "operationId": "RespondTrip",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": " token indicating that a manager has signed in"
+          },
+          {
+            "in": "path",
+            "name": "tripId",
+            "type": "string",
+            "required": true,
+            "description": "tripId of a trip to be accepted or rejected"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "status of the trip to be sent",
+            "schema": {
+              "$ref": "#/definitions/TripRespond"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "trip is successfuly accepted or rejected",
+            "headers": {}
+          },
+          "400": {
+            "description": "token is malformed/invalid or status field is not valid",
+            "headers": {}
+          },
+          "401": {
+            "description": "the requester is not logged in and not allowed to access the endpoint",
+            "headers": {}
+          },
+          "404": {
+            "description": "trip with the provided id doesn't exist, User doesn't have privileges",
+            "headers": {}
+          }
+        }
       }
     }
   },
@@ -873,6 +927,21 @@
           "type": "date"
         }
       }
+    },
+    "TripRespond": {
+      "title": "trip respond request",
+      "example": {
+        "status": "accepted"
+      },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ]
     }
   }
 }

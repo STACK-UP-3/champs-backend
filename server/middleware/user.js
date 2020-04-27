@@ -167,6 +167,31 @@ class User {
       });
     }
   }
+
+  /**
+   * This method verifies the manager role of signed in user.
+   * @param {object} req The user's request.
+   * @param {object} res The response.
+   * @param {Function} next pass to next function
+   * @returns {object} message indicating an error.
+   */
+  static async verifyManagerRole(req, res, next) {
+    try {
+      if (req.user.role === 'Manager') {
+        return next();
+      }
+      return res.status(401).json({
+        status: 401,
+        error: 'Sorry! you don\'t have the permission to accept or reject a trip request'
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        message: 'Something went wrong when verifying user role',
+        error: error.message
+      });
+    }
+  }
 }
 
 export default User;
