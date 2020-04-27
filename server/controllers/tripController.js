@@ -11,15 +11,19 @@ class TripController {
    * This method sets a trip type.
    * @param {object} trip The user's request.
    * @param {string} returnDate The response.
+   * @param {integer} cityNumber The response.
    * @returns {object} The status and some data of the trip.
    */
-  static async setTripType(trip, returnDate) {
+  static async setTripType(trip, returnDate, cityNumber) {
     try {
-      if (returnDate) {
+      if (returnDate && cityNumber === 1) {
         trip.returnDate = returnDate;
         trip.tripType = 'Return';
+      } else if (returnDate && cityNumber > 1) {
+        trip.returnDate = returnDate;
+        trip.tripType = 'Multi-city';
       } else {
-        trip.tripType = 'One-way';
+        trip.tripType = 'one-way';
       }
       return trip;
     } catch (error) {
@@ -39,7 +43,7 @@ class TripController {
       const { lineManager } = req.user;
       if (lineManager !== null) {
         const {
-          returnDate, destination, date, reasons, departure
+          returnDate, destination, date, reasons, departure, accommodationId
         } = body;
         const myuserId = req.user.id;
         const pendingStatus = 'pending';
@@ -50,6 +54,7 @@ class TripController {
           date,
           reasons: myReasons,
           userId: myuserId,
+          accommodationId,
           status: pendingStatus
         };
 
@@ -60,7 +65,7 @@ class TripController {
           userId: myuserId,
           reasons: body.reasons,
           destination: body.destination,
-          date: body.date
+          date: body.date,
         });
         if (foundTrip) {
           return res.status(409).json({
@@ -71,6 +76,7 @@ class TripController {
         const savedTrip = await TripHelper.saveTrip(newTrip);
         savedTrip.departure = req.departure[0];
         savedTrip.destination = req.destination;
+        savedTrip.accommodation = req.accommodation;
 
         return res.status(201).json({
           status: 201,
@@ -105,8 +111,10 @@ class TripController {
         start, end, pages, skip, paginate
       } = await DataPagination.paginateData(req.query);
       const foundTrips = await TripHelper.findTripByRole(role, id, skip, start);
+
       const paginatedData = foundTrips.rows;
       const dataCount = foundTrips.count;
+
       if (paginatedData.length === 0) {
         return res.status(404).json({
           status: 404,

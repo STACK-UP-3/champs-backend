@@ -3,7 +3,8 @@ import models from '../sequelize/models';
 const {
   Trip,
   User,
-  Place
+  Place,
+  Accommodation
 } = models;
 
 /**
@@ -61,7 +62,8 @@ class TripHelper {
           'returnDate',
           'status',
           'createAt',
-          'updatedAt'
+          'updatedAt',
+          'accommodationId'
         ]
       });
 
@@ -80,22 +82,22 @@ class TripHelper {
    * @returns {object} trip data.
    */
   static async findTripByRole(role, id, skip, start) {
-    try {
-      let foundTrip = { rows: [], count: 0 };
-      if (role === 'Manager') {
-        const assignedUsers = await User.findAndCountAll({
-          where: { lineManager: id },
-          attributes: ['id', 'firstname', 'email', 'lastname', 'role', 'lineManager']
-        });
-        if (assignedUsers.count > 0) {
-          const users = assignedUsers.rows.map((user) => user.id);
+    let foundTrip = { rows: [], count: 0 };
+    if (role === 'Manager') {
+      const assignedUsers = await User.findAndCountAll({
+        where: { lineManager: id },
+        attributes: ['id', 'firstname', 'email', 'lastname', 'role', 'lineManager']
+      });
 
-          foundTrip = await Trip.findAndCountAll({
-            where: { userId: users },
-            limit: skip,
-            offset: start,
-            order: [['createdAt', 'DESC']],
-            include:
+      if (assignedUsers.count > 0) {
+        const users = assignedUsers.rows.map((user) => user.id);
+
+        foundTrip = await Trip.findAndCountAll({
+          where: { userId: users },
+          limit: skip,
+          offset: start,
+          order: [['createdAt', 'DESC']],
+          include:
               [
                 {
                   model: User,
@@ -128,18 +130,27 @@ class TripHelper {
                     'country',
                     'city',
                   ]
+                },
+                {
+                  model: Accommodation,
+                  as: 'tripAccommodation',
+                  attributes: [
+                    'id',
+                    'name',
+                    'description',
+                  ]
                 }
               ],
-            attributes: { exclude: ['departure', 'destination'] },
-          });
-        }
-      } else {
-        foundTrip = await Trip.findAndCountAll({
-          where: { userId: id },
-          limit: skip,
-          offset: start,
-          order: [['id', 'DESC']],
-          include:
+          attributes: { exclude: ['departure', 'destination', 'accommodationId'] },
+        });
+      }
+    } else {
+      foundTrip = await Trip.findAndCountAll({
+        where: { userId: id },
+        limit: skip,
+        offset: start,
+        order: [['id', 'DESC']],
+        include:
             [
               {
                 model: User,
@@ -172,15 +183,21 @@ class TripHelper {
                   'country',
                   'city',
                 ]
+              },
+              {
+                model: Accommodation,
+                as: 'tripAccommodation',
+                attributes: [
+                  'id',
+                  'name',
+                  'description',
+                ]
               }
             ],
-          attributes: { exclude: ['departure', 'destination'] },
-        });
-      }
-      return foundTrip;
-    } catch (error) {
-      return error;
+        attributes: { exclude: ['departure', 'destination', 'accommodationId'] },
+      });
     }
+    return foundTrip;
   }
 
   /**
@@ -226,9 +243,18 @@ class TripHelper {
               'country',
               'city',
             ]
+          },
+          {
+            model: Accommodation,
+            as: 'tripAccommodation',
+            attributes: [
+              'id',
+              'name',
+              'description',
+            ]
           }
         ],
-        attributes: { exclude: ['departure', 'destination'] },
+        attributes: { exclude: ['departure', 'destination', 'accommodationId'] },
       });
 
       if (!trip) return false;

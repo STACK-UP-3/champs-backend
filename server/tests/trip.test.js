@@ -10,7 +10,8 @@ import {
   incoDateTrip,
   incoLocation,
   returnTrip,
-  lowReturnTrip
+  lowReturnTrip,
+  multiCityTrip,
 } from './mochData/trips';
 
 chai.use(chaiHttp);
@@ -111,7 +112,7 @@ describe('Trip test suite', () => {
         done(err);
       });
   });
-  it('5.should not create a new trip if date is invalide', (done) => {
+  it('5.should not create a new trip if date is invalid', (done) => {
     router()
       .post('/api/v1/trips/')
       .set('token', notMangerToken)
@@ -123,7 +124,7 @@ describe('Trip test suite', () => {
         done(err);
       });
   });
-  it('6.should not create a new trip if location is invalide', (done) => {
+  it('6.should not create a new trip if location is invalid', (done) => {
     router()
       .post('/api/v1/trips/')
       .set('token', notMangerToken)
@@ -135,7 +136,7 @@ describe('Trip test suite', () => {
         done(err);
       });
   });
-  it('7.should not get a single trip with invilide id ', (done) => {
+  it('7.should not get a single trip with invalid id ', (done) => {
     router()
       .get('/api/v1/trips/aaa')
       .set('token', superAdminDummy2Token)
@@ -146,7 +147,7 @@ describe('Trip test suite', () => {
         done(err);
       });
   });
-  it('8.should not get a single trip which doesnt beloge to you', (done) => {
+  it('8.should not get a single trip which does not belong to you', (done) => {
     router()
       .get('/api/v1/trips/1')
       .set('token', notMangerToken)
@@ -190,13 +191,24 @@ describe('Trip test suite', () => {
         done(err);
       });
   });
-  it('12.should get all trip created by the users he/she manage', (done) => {
+  it('12.should not get all trip created by the users he/she manages', (done) => {
     router()
       .get('/api/v1/trips/')
       .set('token', MangerNoUserToken)
       .end((err, res) => {
         expect(res.body.status).to.equal(404);
         expect(res.body).to.be.an('object');
+        done(err);
+      });
+  });
+  it('13.should create a multi-city trip', (done) => {
+    router()
+      .post('/api/v1/trips/')
+      .set('token', notMangerToken)
+      .send(multiCityTrip)
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res.body).to.be.a('object');
         done(err);
       });
   });

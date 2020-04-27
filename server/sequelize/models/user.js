@@ -9,18 +9,15 @@ export default (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       isVerified: DataTypes.BOOLEAN,
       role: DataTypes.STRING,
-      authType: DataTypes.STRING,
       lineManager: DataTypes.INTEGER,
       gender: DataTypes.STRING,
       birthDate: DataTypes.DATE,
       preferredLanguage: DataTypes.STRING,
-      preferredCurrency: DataTypes.STRING,
+      preferredCurrency: DataTypes.INTEGER,
       location: DataTypes.STRING,
       department: DataTypes.STRING,
       emailNotifications: DataTypes.BOOLEAN,
-      inAppNotifications: DataTypes.BOOLEAN,
-      googleId: DataTypes.STRING,
-      facebookId: DataTypes.STRING,
+      inAppNotifications: DataTypes.BOOLEAN
     },
   );
   User.associate = (models) => {
@@ -32,7 +29,12 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.User, {
       foreignKey: 'lineManager',
       as: 'Users',
-      onDelete: 'CASCADE',
+      onDelete: 'CASCADE'
+    });
+    User.hasMany(models.Accommodation, {
+      foreignKey: 'createdBy',
+      as: 'userAccommodation',
+      onDelete: 'CASCADE'
     });
   };
   return User;

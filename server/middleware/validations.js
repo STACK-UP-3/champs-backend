@@ -6,7 +6,7 @@ import TripHelper from '../helpers/tripHelper';
 import tripSchema from '../schemas/tripSchema';
 import PlaceHelper from '../helpers/placeHelper';
 import placeSchema from '../schemas/placeSchema';
-
+import AccommodationHelper from '../helpers/accommodationHelper';
 
 import {
   signupSchema,
@@ -279,19 +279,30 @@ class Validation {
         user
       } = req;
 
+      const placeIds = body.destination;
       const userId = user.id;
       const tripExists = await TripHelper.findByReasonOrDate({
         ...body,
         userId
       });
+
       const errors = {};
       const placeExistsFrom = await PlaceHelper.placeExist('id', body.departure);
       const placeExistsTo = await PlaceHelper.placeExist('id', body.destination);
       const isValideDate = DateHelper.formatDate(body.date);
       const isRtnDate = DateHelper.verifyStartReturnDate(body.returnDate, body.date);
 
+      const accommodation = {
+        id: body.accommodationId,
+        placeIds
+      };
+      const accommodationExist = await AccommodationHelper.findAccommodation(accommodation);
+
       if (placeExistsFrom.length === 0) {
         errors.departure = 'choose proper departure location.';
+      }
+      if (accommodationExist.length === 0) {
+        errors.accommodation = 'choose available accommodation.';
       }
       if (placeExistsTo.length === 0) {
         errors.destination = 'choose proper destination location.';

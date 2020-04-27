@@ -1,14 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
-  const Place = sequelize.define(
-    'Place',
-    {
-      name: DataTypes.STRING,
-      country: DataTypes.STRING,
-      city: DataTypes.STRING,
-    },
-    {}
-  );
+  const Place = sequelize.define('Place', {
+    name: DataTypes.STRING,
+    country: DataTypes.STRING,
+    city: DataTypes.STRING
+  }, {});
   Place.associate = (models) => {
+    Place.hasMany(models.Accommodation, {
+      foreignKey: 'placeId',
+      as: 'accommodations',
+      onDelete: 'CASCADE'
+    });
     Place.hasMany(models.Trip, {
       foreignKey: 'departure',
       as: 'Departure',
