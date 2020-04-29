@@ -6,7 +6,7 @@ import TripHelper from '../helpers/tripHelper';
 import tripSchema from '../schemas/tripSchema';
 import PlaceHelper from '../helpers/placeHelper';
 import placeSchema from '../schemas/placeSchema';
-
+import accommodationSchema from '../schemas/accommodationSchema';
 
 import {
   signupSchema,
@@ -369,6 +369,42 @@ class Validation {
       return next();
     }
     res.status(400).json({ status: 400, error: 'Only the follwing values are allowed: accepted, rejected or pending' });
+  }
+
+  /**
+   * This method validates accommodation data from the API consumer.
+   * @param {object} req The user's request.
+   * @param {object} res The response.
+   * @param {object} next pass to next method.
+   * @returns {object} Error message.
+   */
+  static async validateAccommodationData(req, res, next) {
+    const { body } = req;
+    const { error } = accommodationSchema.validate(body);
+    const valid = error == null;
+    if (valid) {
+      const errors = {};
+      const placeFound = await PlaceHelper.placeExist('id', body.locationId);
+
+      if (placeFound.length === 0) {
+        errors.locationId = 'The specified location does not exist!';
+      }
+      if (Object.keys(errors).length !== 0) {
+        return res.status(422).json({
+          status: 422,
+          error: errors
+        });
+      }
+      req.locationId = placeFound;
+      next();
+    } else {
+      const { details } = error;
+      const message = details.map(i => i.message).join(',');
+      res.status(422).json({
+        status: 422,
+        error: message
+      });
+    }
   }
 }
 

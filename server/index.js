@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import passport from 'passport';
+import bodyParser from 'body-parser';
 import swaggerUI from 'swagger-ui-express';
 import route from './routes/index';
 import db from './sequelize/models';
@@ -12,9 +13,9 @@ import statusLogger from './helpers/loggerHelper';
 dotenv.config();
 
 const app = express();
-app.use(express.json());
+app.use(bodyParser.json());
 const { sequelize } = db;
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
 const basePath = '/api/v1';

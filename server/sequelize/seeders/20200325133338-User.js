@@ -122,6 +122,21 @@ const up = (queryInterface) => queryInterface.bulkInsert(
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    googleId: '',
+    facebookId: '',
+    firstname: 'Dumebi',
+    lastname: 'Hiu',
+    email: 'nogiveup119@gmail.com',
+    username: 'dummyData06',
+    password: PasswordHelper.hashPassword('123456789'),
+    role: 'Supplier',
+    authType: 'local',
+    lineManager: 1,
+    isVerified: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
   ], {},
 );
 const down = (queryInterface) => queryInterface.bulkDelete('Users', null, {});

@@ -27,9 +27,6 @@ class DateHelper {
     const formattedReturnDate = new Date(returnDate);
     const formattedStartDate = new Date(startDate);
     let isValid = false;
-    if (formattedReturnDate !== undefined) {
-      isValid = false;
-    }
     if (formattedStartDate > formattedReturnDate) isValid = true;
     return isValid;
   }
