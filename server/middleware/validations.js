@@ -355,6 +355,21 @@ class Validation {
     }
     return res.status(400).json({ status: 400, error: joiMessage(result.error) });
   }
+
+  /**
+   * This method validates trip status from API consumer.
+   * @param {object} req The user's request.
+   * @param {object} res The response.
+   * @param {Function} next pass to next function
+   * @returns {object} Error message.
+   */
+  static async validateTripResponse(req, res, next) {
+    const { status } = req.body;
+    if (status === 'accepted' || status === 'rejected' || status === 'pending') {
+      return next();
+    }
+    res.status(400).json({ status: 400, error: 'Only the follwing values are allowed: accepted, rejected or pending' });
+  }
 }
 
 export default Validation;

@@ -156,6 +156,40 @@ class TripController {
       });
     }
   }
+
+  /**
+   * This method handles accepting or rejecting trip request.
+   * @param {object} req The user's request.
+   * @param {object} res The response.
+   * @returns {object} The status and some data of the trip.
+   */
+  static async respondTrip(req, res) {
+    try {
+      const { tripId } = req.params;
+      const { status } = req.body;
+      const { role, id } = req.user;
+      const foundTrip = await TripHelper.findTripById(tripId, { role, id });
+      if (foundTrip) {
+        await TripHelper.updateTripById(tripId, { status });
+        const updatedTrip = await TripHelper.findTripById(tripId, { role, id });
+        return res.status(200).send({
+          status: 200,
+          message: `The Trip has been successfully ${status}`,
+          data: updatedTrip
+        });
+      }
+      res.status(404).json({
+        status: 404,
+        error: ' sorry, The trip you are trying to update doesn\'t exist'
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        message: 'Something went wrong when responding to the trip',
+        error: error.message
+      });
+    }
+  }
 }
 
 export default TripController;

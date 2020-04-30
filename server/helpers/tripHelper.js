@@ -205,6 +205,7 @@ class TripHelper {
               'lastname',
               'email',
               'role',
+              'department'
             ]
           },
           {
@@ -236,7 +237,26 @@ class TripHelper {
       const { lineManager } = trip.User;
       const { userId } = trip;
       if (userId === id || (role === 'Manager' && lineManager === id) || role === 'Super Administrator') return trip;
+      return false;
+    } catch (error) {
+      return error;
+    }
+  }
 
+  /**
+   * This method updates a trip by id.
+   * @param {string} tripId trip id.
+   * @param {object} data new data of the trip
+   * @returns {object} updated trip data.
+   */
+  static async updateTripById(tripId, data) {
+    try {
+      const [, updatedTrip] = await Trip.update(data, {
+        where: { id: tripId },
+        returning: true,
+        plain: true
+      });
+      if (updatedTrip) return updatedTrip;
       return false;
     } catch (error) {
       return error;
