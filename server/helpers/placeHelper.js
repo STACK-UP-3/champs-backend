@@ -12,7 +12,7 @@ class PlaceHelper {
  * @param {string} value actual value.
  * @returns {object} User data.
  */
-  static async placeExist(column, value) {
+  static async findExistingPlace(column, value) {
     try {
       const { Place } = models;
       const PlaceExist = await Place.findAll({
@@ -21,6 +21,33 @@ class PlaceHelper {
         }
       });
       return PlaceExist;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  /**
+ * This method checks whether the place exists using array of ids.
+ * @param {string} column a value column where value belongs.
+ * @param {string} values actual value.
+ * @returns {object} User data.
+ */
+  static async findPlaceByArray(column, values) {
+    try {
+      const { Place } = models;
+      const places = await Promise.all(values.map(async value => {
+        const foundPlaces = await Place.findAll({
+          where: {
+            [column]: value
+          }
+        });
+
+        if (foundPlaces[0] === undefined) {
+          return { existence: null, value };
+        }
+        return foundPlaces;
+      }));
+      return places;
     } catch (error) {
       return error;
     }

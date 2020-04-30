@@ -285,22 +285,24 @@ class Validation {
         userId
       });
       const errors = {};
-      const placeExistsFrom = await PlaceHelper.placeExist('id', body.departure);
-      const placeExistsTo = await PlaceHelper.placeExist('id', body.destination);
+      const foundDeparture = await PlaceHelper.findExistingPlace('id', body.departure);
+      const retrievedDestinations = await PlaceHelper.findPlaceByArray('id', body.destination);
+      const nonFoundDests = retrievedDestinations.filter(place => place.existence === null);
+
       const isValideDate = DateHelper.formatDate(body.date);
       const isRtnDate = DateHelper.verifyStartReturnDate(body.returnDate, body.date);
 
-      if (placeExistsFrom.length === 0) {
-        errors.departure = 'choose proper departure location.';
+      if (foundDeparture.length === 0) {
+        errors.departure = 'The chosen departure does not exist.';
       }
-      if (placeExistsTo.length === 0) {
-        errors.destination = 'choose proper destination location.';
+      if (nonFoundDests.length > 0) {
+        errors.destination = `The chosen destination with id ${nonFoundDests[0].value} does not exist.`;
       }
       if (isRtnDate) {
-        errors.reasonsDate = 'Your return date is lower than Travel date.';
+        errors.reasonsDate = 'Your return date is lower than travel date.';
       }
       if (isValideDate) {
-        errors.date = 'The date is in the past, please choose a future date.';
+        errors.date = 'The date is in the past, please choose a valid date.';
       }
       if (Object.keys(errors).length !== 0) {
         return res.status(422).json({
@@ -311,11 +313,11 @@ class Validation {
       if (tripExists) {
         return res.status(409).json({
           status: 409,
-          error: 'This trip already exists, use another reasons or date.'
+          error: 'This trip request already exists, use another reason.'
         });
       }
-      req.departure = placeExistsFrom;
-      req.destination = placeExistsTo;
+      req.departure = foundDeparture;
+      req.destination = retrievedDestinations;
       next();
     } else {
       const {
@@ -384,7 +386,7 @@ class Validation {
     const valid = error == null;
     if (valid) {
       const errors = {};
-      const placeFound = await PlaceHelper.placeExist('id', body.locationId);
+      const placeFound = await PlaceHelper.findExistingPlace('id', body.locationId);
 
       if (placeFound.length === 0) {
         errors.locationId = 'The specified location does not exist!';

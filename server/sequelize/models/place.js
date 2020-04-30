@@ -14,11 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'Departure',
       onDelete: 'CASCADE',
     });
-    Place.hasMany(models.Trip, {
-      foreignKey: 'destination',
-      as: 'Destination',
-      onDelete: 'CASCADE',
-    });
   };
   return Place;
 };

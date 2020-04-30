@@ -21,7 +21,7 @@ class PlaceController {
         country: body.country,
         city: body.city,
       };
-      const foundPlace = await PlaceHelper.placeExist('name', body.name);
+      const foundPlace = await PlaceHelper.findExistingPlace('name', body.name);
       if (foundPlace.length !== 0) {
         return res.status(409).json({
           status: 409,
@@ -88,7 +88,7 @@ class PlaceController {
   static async retrievePlace(req, res) {
     try {
       const { placeId } = req.params;
-      const foundPlace = await PlaceHelper.placeExist('id', placeId);
+      const foundPlace = await PlaceHelper.findExistingPlace('id', placeId);
       if (foundPlace.length > 0) {
         return res.status(200).json({
           status: 200,
