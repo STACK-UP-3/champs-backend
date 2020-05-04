@@ -41,13 +41,11 @@ class AuthController {
           email,
           username
         });
-        const mail = await AuthHelper.sendMail(email, token);
-        if (mail.isSent === true) {
-          res.status(201).send({
-            status: 201,
-            message: 'Account created succesfully, check your email for verification',
-          });
-        }
+        await AuthHelper.sendMail(email, token);
+        res.status(201).send({
+          status: 201,
+          message: 'Account created succesfully, check your email for verification',
+        });
       }
     } catch (error) {
       return res.status(500).json({

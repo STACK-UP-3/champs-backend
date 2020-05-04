@@ -19,7 +19,7 @@ const up = (queryInterface, Sequelize) => queryInterface.createTable('Trips', {
     allowNull: false
   },
   destination: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
     allowNull: false
   },
   date: {
@@ -46,7 +46,7 @@ const up = (queryInterface, Sequelize) => queryInterface.createTable('Trips', {
   updatedAt: {
     allowNull: false,
     type: Sequelize.DATE
-  }
+  },
 });
 const down = (queryInterface) => queryInterface.dropTable('Trips');
 

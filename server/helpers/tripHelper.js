@@ -56,6 +56,7 @@ class TripHelper {
           'tripType',
           'departure',
           'destination',
+          'accommodationId',
           'date',
           'reasons',
           'returnDate',
@@ -87,6 +88,7 @@ class TripHelper {
           where: { lineManager: id },
           attributes: ['id', 'firstname', 'email', 'lastname', 'role', 'lineManager']
         });
+
         if (assignedUsers.count > 0) {
           const users = assignedUsers.rows.map((user) => user.id);
 
@@ -119,18 +121,8 @@ class TripHelper {
                     'city',
                   ]
                 },
-                {
-                  model: Place,
-                  as: 'Destination',
-                  attributes: [
-                    'id',
-                    'name',
-                    'country',
-                    'city',
-                  ]
-                }
               ],
-            attributes: { exclude: ['departure', 'destination'] },
+            attributes: { exclude: ['departure'] },
           });
         }
       } else {
@@ -163,18 +155,8 @@ class TripHelper {
                   'city',
                 ]
               },
-              {
-                model: Place,
-                as: 'Destination',
-                attributes: [
-                  'id',
-                  'name',
-                  'country',
-                  'city',
-                ]
-              }
             ],
-          attributes: { exclude: ['departure', 'destination'] },
+          attributes: { exclude: ['departure'] },
         });
       }
       return foundTrip;
@@ -218,18 +200,8 @@ class TripHelper {
               'city',
             ]
           },
-          {
-            model: Place,
-            as: 'Destination',
-            attributes: [
-              'id',
-              'name',
-              'country',
-              'city',
-            ]
-          }
         ],
-        attributes: { exclude: ['departure', 'destination'] },
+        attributes: { exclude: ['departure'] },
       });
 
       if (!trip) return false;

@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       tripType: DataTypes.STRING,
       departure: DataTypes.INTEGER,
-      destination: DataTypes.INTEGER,
+      destination: DataTypes.ARRAY(DataTypes.INTEGER),
       date: DataTypes.DATE,
       returnDate: DataTypes.DATE,
       reasons: DataTypes.STRING,
@@ -22,11 +22,6 @@ module.exports = (sequelize, DataTypes) => {
     Trip.belongsTo(models.Place, {
       foreignKey: 'departure',
       as: 'Departure',
-      constraints: false,
-    });
-    Trip.belongsTo(models.Place, {
-      foreignKey: 'destination',
-      as: 'Destination',
       constraints: false,
     });
   };

@@ -11,15 +11,19 @@ class TripController {
    * This method sets a trip type.
    * @param {object} trip The user's request.
    * @param {string} returnDate The response.
+   * @param {integer} cityNumber The response.
    * @returns {object} The status and some data of the trip.
    */
-  static async setTripType(trip, returnDate) {
+  static async setTripType(trip, returnDate, cityNumber) {
     try {
-      if (returnDate) {
+      if (returnDate && cityNumber === 1) {
         trip.returnDate = returnDate;
-        trip.tripType = 'Return';
+        trip.tripType = 'return';
+      } else if (returnDate && cityNumber > 1) {
+        trip.returnDate = returnDate;
+        trip.tripType = 'multi-city';
       } else {
-        trip.tripType = 'One-way';
+        trip.tripType = 'one-way';
       }
       return trip;
     } catch (error) {
@@ -65,7 +69,7 @@ class TripController {
         if (foundTrip) {
           return res.status(409).json({
             status: 409,
-            data: 'You already created this trip'
+            data: 'You already created this trip request'
           });
         }
         const savedTrip = await TripHelper.saveTrip(newTrip);
@@ -74,7 +78,7 @@ class TripController {
 
         return res.status(201).json({
           status: 201,
-          message: 'Trip has been successfully created.',
+          message: 'Trip request has been successfully submitted.',
           data: savedTrip
         });
       }
@@ -106,6 +110,7 @@ class TripController {
       } = await DataPagination.paginateData(req.query);
       const foundTrips = await TripHelper.findTripByRole(role, id, skip, start);
       const paginatedData = foundTrips.rows;
+
       const dataCount = foundTrips.count;
       if (paginatedData.length === 0) {
         return res.status(404).json({
