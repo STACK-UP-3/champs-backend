@@ -22,5 +22,9 @@ export default [
   {
     email: 'dummydata01@example.com',
     password: '123456789'
+  },
+  {
+    email: 'nogiveup119@gmail.com',
+    password: '123456789'
   }
 ];
