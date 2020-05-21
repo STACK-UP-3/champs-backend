@@ -3,6 +3,7 @@ import express from 'express';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import swaggerUI from 'swagger-ui-express';
+import cors from 'cors';
 import route from './routes/index';
 import db from './sequelize/models';
 import logger from './config/winston';
@@ -20,6 +21,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000;
 const basePath = '/api/v1';
 
+
+app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
