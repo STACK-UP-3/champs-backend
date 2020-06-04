@@ -62,12 +62,9 @@ describe('Google Social Sign In Test', () => {
   it('should successfully sign in the user with Google', (done) => {
     request(app).get('/api/v1/auth/google/return')
       .send(mockData[2])
-      .expect(200)
+      .expect(302)
       .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('status');
-        expect(res.body).to.have.property('message');
+        expect(res).to.have.status(302);
         done();
       });
   });
@@ -87,12 +84,9 @@ describe('Facebook Social Sign In Test', () => {
   it('should successfully sign in the user with Facebook', (done) => {
     request(app).get('/api/v1/auth/facebook/return')
       .send(mockData[2])
-      .expect(200)
+      .expect(302)
       .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('status');
-        expect(res.body).to.have.property('message');
+        expect(res).to.have.status(302);
         done();
       });
   });
