@@ -172,23 +172,7 @@ class AuthController {
         isVerified
       });
 
-      res.status(200).json({
-        status: 200,
-        message: `User successfully signed in with ${authType}`,
-        data: {
-          token,
-          user: {
-            username,
-            firstname,
-            lastname,
-            email,
-            role,
-            lineManager,
-            isVerified,
-            authType
-          }
-        }
-      });
+      res.redirect(`https://champs-frontend.herokuapp.com/home?${token}`);
     } catch (error) {
       return res.status(500).json({
         status: 500,

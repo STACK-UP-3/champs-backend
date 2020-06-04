@@ -135,7 +135,7 @@ class User {
    */
   static async verifyGoogleSignIn(req, res, next) {
     try {
-      passport.authenticate('google', { failureRedirect: '/google', session: false }, (err, user) => {
+      passport.authenticate('google', { failureRedirect: 'https://champs-frontend.herokuapp.com/signin', session: false }, (err, user) => {
         if (err) { return next(err); }
         req.user = user;
         return next();
@@ -154,7 +154,7 @@ class User {
      */
   static async verifyFacebookSignIn(req, res, next) {
     try {
-      passport.authenticate('facebook', { failureRedirect: '/facebook', session: false }, (err, user) => {
+      passport.authenticate('facebook', { failureRedirect: 'https://champs-frontend.herokuapp.com/signin', session: false }, (err, user) => {
         if (err) { return next(err); }
         req.user = user;
         return next();
