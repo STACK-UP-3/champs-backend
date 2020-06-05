@@ -44,7 +44,7 @@ class AuthController {
         await AuthHelper.sendMail(email, token);
         res.status(201).send({
           status: 201,
-          message: 'Account created succesfully, check your email for verification',
+          message: 'Account has been created successfully. Check your email for a verification link.'
         });
       }
     } catch (error) {
@@ -64,16 +64,11 @@ class AuthController {
    */
   static async verifyEmail(req, res) {
     const { token } = req.params;
-    const { id, email, username } = await TokenHelper.verifyToken(token);
+    const { id } = await TokenHelper.verifyToken(token);
     try {
       if (id) {
         AuthHelper.verifyUserEmail(id);
-        res.status(200).send({
-          userid: id,
-          email,
-          username,
-          message: ' Your email has been successfully verified',
-        });
+        res.redirect('https://champs-frontend.herokuapp/verification');
       } else {
         res.status(400).send({
           status: 400,
