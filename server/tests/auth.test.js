@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import { config } from 'dotenv';
+import request from 'supertest';
 import app from '../index';
 
 config();
@@ -90,13 +91,11 @@ describe('GET token to verify sign up', () => {
 
   it('should return an object ', (done) => {
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZ2d5cmVpbmFAZ21haWwuY29tIiwiaWF0IjoxNTg2Mzg3NDk3fQ.G2huyQ7JiLvQjgaaUIkXZNXs0OHwRY35RirFgOGkV3I';
-    router()
-      .get(`/api/v1/auth/verify/${token}`)
+    request(app).get(`/api/v1/auth/verify/${token}`)
+      .expect(302)
       .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('message');
-        done(err);
+        expect(res).to.have.status(302);
+        done();
       });
   });
 });

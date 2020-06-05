@@ -7,7 +7,7 @@ const router = () => chai.request(app);
 
 describe('Test resetting user password endpoint', () => {
   const user = {
-    email: 'aggyreina@gmail.com',
+    email: 'aggy@gmail.com',
     email0: '',
     password: 'aggggg',
     passwordConfirm: 'aggggg',
