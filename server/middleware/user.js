@@ -29,11 +29,45 @@ class User {
     } catch (error) {
       return res.status(500).json({
         status: 500,
-        message: 'Something went wrong when verifying used email',
+        message: 'Something went wrong while verifying used email',
         error: error.message
       });
     }
   }
+
+  /**
+   * This method verifies whether email is registered.
+   * @param {object} req the user's request.
+   * @param {object} res the response.
+   * @param {Function} next pass to next function.
+   * @returns {object} message indicating used email.
+   */
+  static async verifyRegisteredEmail(req, res, next) {
+    try {
+      const { email } = req.body;
+      const registeredEmail = await UserHelper.findUser({ email });
+      if (registeredEmail === null) {
+        res.status(404).send({
+          status: 404,
+          message: 'Email is not registered in our system.'
+        });
+      } else if (registeredEmail.dataValues.isVerified === true) {
+        next();
+      } else {
+        res.status(400).send({
+          status: 400,
+          message: 'You should verify your email before you reset the password.'
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        message: 'Something went wrong while resetting your password.',
+        error: error.message
+      });
+    }
+  }
+
 
   /**
    * This method verifies whether username is used.

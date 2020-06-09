@@ -68,7 +68,7 @@ class AuthController {
     try {
       if (id) {
         AuthHelper.verifyUserEmail(id);
-        res.redirect('https://champs-frontend.herokuapp.com/verification');
+        res.redirect('https://champs-frontend.herokuapp.com/verify-email');
       } else {
         res.status(400).send({
           status: 400,

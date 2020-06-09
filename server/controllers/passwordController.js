@@ -49,6 +49,17 @@ class PasswordController {
   }
 
   /**
+   *  This method handles the reset password operation.
+   * @param {object} req The user's request.
+   * @param {object} res The response.
+   * @returns {object} The status and some data of the user.
+   */
+  static async changePassword(req, res) {
+    const { email, token } = req.params;
+    res.redirect(`https://champs-frontend.herokuapp.com/reset-password?email=${email}&token=${token}`);
+  }
+
+  /**
      * This method updates user password.
      * @param {object} req The user's request.
      * @param {object} res The response.
