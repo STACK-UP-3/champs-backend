@@ -30,14 +30,18 @@ class AuthHelper {
       message = {
         to: email,
         from: 'champsdev2@gmail.com',
-        subject: 'Reset Password Link',
-        text: 'Reset Password Link',
+        subject: 'Password Reset Link',
+        text: 'Password Reset Link',
         html: `
         <div style="background-color: white;border: wheat 2px solid;padding: 20px;
         max-width: 50vw;margin: 50px;align-items: center;height: 45vh;">
-            <h1 style="font-size: 25px;margin-top: 30px;">You received the reset password link</h1>
-            <p style="font-family: fantasy;font-size: 20px;">Copy the following link and use it your favorite API testing platform such as Postman or Insomnia to reset your password: </p>
-            <p> ${url} </p>
+            <h1 style="font-size: 25px;margin-top: 30px;">You received a password reset link</h1>
+            <button style="background-color: rgb(11, 132, 212);
+            width: 130px;height: 30px;border: none;margin-top: 40px;
+            "><a href="${url}" style="text-decoration: none;color: white;font-size: 14px;
+            ">
+            Reset Password</a>
+            </button>
         </div>
         `,
       };
@@ -52,7 +56,7 @@ class AuthHelper {
       <div style="background-color: white;border: wheat 2px solid;padding: 20px;
       max-width: 50vw;margin: 50px;align-items: center;height: 45vh;">
           <h1 style="font-size: 25px;margin-top: 30px;">Welcome to Nomad champs</h1>
-          <p style="font-family: fantasy;font-size: 20px;">Comfirm your email to proceed to Nomad champs</p>
+          <p style="font-family: fantasy;font-size: 20px;">Confirm your email to proceed to Barefoot Nomad champs</p>
           <button style="background-color: rgb(11, 132, 212);
           width: 130px;height: 30px;border: none;margin-top: 40px;
           "><a href="${url}" style="text-decoration: none;color: white;font-size: 14px;
