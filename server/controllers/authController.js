@@ -20,8 +20,14 @@ class AuthController {
   static async signUp(req, res) {
     try {
       const {
-        lastname, firstname, email, username, password
+        lastname, firstname, email, username, password, confirmPassword
       } = req.body;
+      if (password !== confirmPassword) {
+        return res.status(400).json({
+          status: 400,
+          message: 'The passwords must match.',
+        });
+      }
       const role = 'Requester';
       const hashedPassword = passwordHelper.hashPassword(password);
       const data = {
@@ -31,6 +37,7 @@ class AuthController {
         username,
         role,
         password: hashedPassword,
+        confirmPassword,
         authType: 'local',
         isVerified: false
       };

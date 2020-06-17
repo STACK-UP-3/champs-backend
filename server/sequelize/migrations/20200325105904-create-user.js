@@ -34,6 +34,11 @@ module.exports = {
       allowNull: true,
       select: false
     },
+    confirmPassword: {
+      type: Sequelize.STRING(1000),
+      allowNull: true,
+      select: false
+    },
     role: {
       type: Sequelize.STRING,
     },

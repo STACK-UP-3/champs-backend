@@ -14,18 +14,21 @@ describe('POST data to SIGNUP', () => {
     email: 'dummyData0001@gmail.com',
     username: 'dummydata001',
     password: '123456',
+    confirmPassword: '123456',
   }, {
     lastname: 'Dummy',
     firstname: 'Data02',
     email: 'chgris02gmail.com',
     username: 'dummydatao2',
     password: '123456',
+    confirmPassword: '123456',
   }, {
     lastname: 'Dummy',
     firstname: 'Data02',
     email: 'dummyData0001@gmail.com',
     username: 'dummydatao1',
     password: '123456',
+    confirmPassword: '123456',
   }, {
     lastname: 'Dummy',
     firstname: 'Data03',
