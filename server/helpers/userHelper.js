@@ -15,7 +15,7 @@ class UserHelper {
       const { User } = models;
       const result = await User.create(data, {
         fields: [
-          'googleId', 'facebookId', 'username', 'firstname', 'lastname', 'email', 'password', 'role', 'authType', 'lineManager', 'isVerified'
+          'googleId', 'facebookId', 'username', 'firstname', 'lastname', 'email', 'password', 'confirmPassword', 'role', 'authType', 'lineManager', 'isVerified'
         ]
       });
       return result;
