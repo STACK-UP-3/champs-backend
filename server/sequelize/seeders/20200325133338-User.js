@@ -7,6 +7,7 @@ const up = (queryInterface) => queryInterface.bulkInsert(
     lastname: 'dontmodifieme',
     googleId: '',
     facebookId: '',
+    profileImage: 'https://mcdn.wallpapersafari.com/medium/57/33/UW0jhS.jpg',
     email: 'dummydata01@example.com',
     username: 'dummydata01',
     password: PasswordHelper.hashPassword('123456789'),
@@ -20,6 +21,7 @@ const up = (queryInterface) => queryInterface.bulkInsert(
   {
     googleId: '',
     facebookId: '',
+    profileImage: 'https://mcdn.wallpapersafari.com/medium/57/33/UW0jhS.jpg',
     firstname: 'dummy',
     lastname: 'Data',
     email: 'dummydata02@example.com',
@@ -35,6 +37,7 @@ const up = (queryInterface) => queryInterface.bulkInsert(
   {
     googleId: '',
     facebookId: '',
+    profileImage: 'https://mcdn.wallpapersafari.com/medium/57/33/UW0jhS.jpg',
     firstname: 'dummy3',
     lastname: 'Data',
     email: 'dummydata03@example.com',
@@ -50,6 +53,7 @@ const up = (queryInterface) => queryInterface.bulkInsert(
   {
     googleId: '',
     facebookId: '',
+    profileImage: 'https://mcdn.wallpapersafari.com/medium/57/33/UW0jhS.jpg',
     firstname: 'dummy4',
     lastname: 'Data',
     email: 'notsuperadmin@example.com',
@@ -65,6 +69,7 @@ const up = (queryInterface) => queryInterface.bulkInsert(
   {
     googleId: '',
     facebookId: '',
+    profileImage: 'https://mcdn.wallpapersafari.com/medium/57/33/UW0jhS.jpg',
     firstname: 'Dumebi',
     lastname: 'Hiu',
     email: 'dev@example.com',
@@ -80,6 +85,7 @@ const up = (queryInterface) => queryInterface.bulkInsert(
   {
     googleId: '',
     facebookId: '',
+    profileImage: 'https://mcdn.wallpapersafari.com/medium/57/33/UW0jhS.jpg',
     firstname: 'Dumebi',
     lastname: 'Hiu',
     email: 'champs@gmail.com',
@@ -95,6 +101,7 @@ const up = (queryInterface) => queryInterface.bulkInsert(
   {
     googleId: '',
     facebookId: '',
+    profileImage: 'https://mcdn.wallpapersafari.com/medium/57/33/UW0jhS.jpg',
     firstname: 'ag',
     lastname: 'gy',
     email: 'aggyreina@gmail.com',
@@ -110,6 +117,7 @@ const up = (queryInterface) => queryInterface.bulkInsert(
   {
     googleId: '',
     facebookId: '',
+    profileImage: 'https://mcdn.wallpapersafari.com/medium/57/33/UW0jhS.jpg',
     firstname: 'chris',
     lastname: 'meme',
     email: 'chrischris@example.com',
@@ -125,6 +133,7 @@ const up = (queryInterface) => queryInterface.bulkInsert(
   {
     googleId: '',
     facebookId: '',
+    profileImage: 'https://mcdn.wallpapersafari.com/medium/57/33/UW0jhS.jpg',
     firstname: 'Dumebi',
     lastname: 'Hiu',
     email: 'nogiveup119@gmail.com',

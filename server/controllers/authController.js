@@ -4,7 +4,6 @@ import UserHelper from '../helpers/userHelper';
 import TokenHelper from '../helpers/tokenHelper';
 import passwordHelper from '../helpers/passwordHelper';
 
-
 /**
  * This class contains all methods
  * required to handle all
@@ -172,7 +171,7 @@ class AuthController {
         isVerified
       });
 
-      res.redirect(`https://champs-frontend.herokuapp.com/home?${token}`);
+      res.redirect(`http://localhost:8080/home?${token}`);
     } catch (error) {
       return res.status(500).json({
         status: 500,

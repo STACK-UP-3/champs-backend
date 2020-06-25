@@ -44,9 +44,12 @@ class User {
    */
   static async verifyUsedUsername(req, res, next) {
     try {
+      const { token } = req.headers;
+      const data = TokenHelper.verifyToken(token);
+      const { email } = data;
       const { username } = req.body;
       const user = await UserHelper.findUser({ username });
-      if (user === null || username === undefined) {
+      if (user === null || username === undefined || email === user.email) {
         next();
       } else {
         res.status(409).send({
@@ -71,26 +74,12 @@ class User {
    * @returns {object} message indicating an error.
    */
   static async verifyProfileOwner(req, res, next) {
-    const { username } = req.params;
     const { token } = req.headers;
     try {
-      const user = await UserHelper.findUser({ username });
       const data = TokenHelper.verifyToken(token);
-      if (user !== null) {
-        if (data.username === username || data.id === user.id) {
-          next();
-        } else {
-          res.status(401).send({
-            status: 401,
-            message: "You don't have permission to access the specified user profile",
-          });
-        }
-      } else {
-        res.status(404).send({
-          status: 404,
-          message: "The specified username doesn't exist",
-        });
-      }
+      const { email } = data;
+      await UserHelper.findUser({ email });
+      next();
     } catch (error) {
       return res.status(500).json({
         status: 500,
@@ -99,7 +88,6 @@ class User {
       });
     }
   }
-
 
   /**
    * This method verifies user role.
