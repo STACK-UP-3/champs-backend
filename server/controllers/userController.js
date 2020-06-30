@@ -132,6 +132,7 @@ class UserController {
         firstname,
         username,
         gender,
+        profileImage,
         birthDate,
         preferredLanguage,
         preferredCurrency,
@@ -146,6 +147,7 @@ class UserController {
         firstname,
         username,
         gender,
+        profileImage,
         birthDate,
         preferredLanguage,
         preferredCurrency,
@@ -179,8 +181,10 @@ class UserController {
     */
   static async retrieveProfile(req, res) {
     try {
-      const { username } = req.params;
-      const user = await UserHelper.findUser({ username });
+      const { token } = req.headers;
+      const data = TokenHelper.verifyToken(token);
+      const { email } = data;
+      const user = await UserHelper.findUser({ email });
       const { password, ...userProfile } = user.dataValues;
 
       res.status(200).send({
@@ -196,6 +200,5 @@ class UserController {
     }
   }
 }
-
 
 export default UserController;

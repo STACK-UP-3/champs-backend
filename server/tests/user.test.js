@@ -128,18 +128,6 @@ describe('patch data to UPDATE', () => {
         done(err);
       });
   });
-  it('should return an error if the username used doesn\'t match the one used in login', (done) => {
-    router()
-      .patch('/api/v1/user/dummydata001/profile')
-      .set('token', userToken)
-      .send(user[0])
-      .end((err, res) => {
-        expect(res).to.have.status(401);
-        expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('message');
-        done(err);
-      });
-  });
   const wrongToken = 'wectgvkhbgjucgfgvbkhjlkmdcfdcvsbvhysvcshc';
   it('should return an error if there is invalid token', (done) => {
     router()
@@ -163,17 +151,6 @@ describe('GET data to profile ', () => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.a('object');
         expect(res.body).to.have.property('data');
-        done(err);
-      });
-  });
-  it('should return an error as the username used doesn\'t exist', (done) => {
-    router()
-      .get('/api/v1/user/dummydata/profile')
-      .set('token', userToken)
-      .end((err, res) => {
-        expect(res).to.have.status(404);
-        expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('message');
         done(err);
       });
   });

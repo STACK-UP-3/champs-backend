@@ -143,7 +143,6 @@ class AuthHelper {
     try {
       const {
         id,
-        displayName: username,
         provider: authType,
         name: { givenName: firstname, familyName: lastname },
         _json: { email },
@@ -154,7 +153,7 @@ class AuthHelper {
         firstname,
         lastname,
         email,
-        username: username || firstname,
+        username: firstname.replace(' ', ''),
         role: 'Requester',
         authType,
         lineManager: null,

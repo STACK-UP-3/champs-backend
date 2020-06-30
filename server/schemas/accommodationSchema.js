@@ -1,6 +1,5 @@
 import Joi from '@hapi/joi';
 
-
 const accommodationSchema = Joi.object().keys({
   name: Joi.string().required().trim(),
   description: Joi.string().required().trim(),

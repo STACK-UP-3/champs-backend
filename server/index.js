@@ -21,7 +21,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000;
 const basePath = '/api/v1';
 
-
 app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());

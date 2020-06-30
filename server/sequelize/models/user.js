@@ -22,6 +22,7 @@ export default (sequelize, DataTypes) => {
       inAppNotifications: DataTypes.BOOLEAN,
       googleId: DataTypes.STRING,
       facebookId: DataTypes.STRING,
+      profileImage: DataTypes.STRING
     },
   );
   User.associate = (models) => {

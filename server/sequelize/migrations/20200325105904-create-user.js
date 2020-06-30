@@ -20,6 +20,9 @@ module.exports = {
     facebookId: {
       type: Sequelize.STRING,
     },
+    profileImage: {
+      type: Sequelize.STRING,
+    },
     username: {
       allowNull: false,
       type: Sequelize.STRING
